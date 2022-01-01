@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
+
 const SignUpForm = () => {
+    const [passwordVisibility, setPasswordVisibility] = useState(false)
+    const [reEnterpasswordVisibility, setReEnterPasswordVisibility] = useState(false)
     return (
         <div>
             <br />
@@ -22,11 +25,13 @@ const SignUpForm = () => {
                 </Form.Group>
                 <Form.Group >
                     <Form.Label>Enter your password</Form.Label>
-                    <Form.Control type="password" placeholder="Enter your password" />
+                    <Form.Control type={passwordVisibility ? "text" : "password"} placeholder="Enter your password" />
+                    <button type="button" onClick={() => setPasswordVisibility(!passwordVisibility)}>{passwordVisibility ? "hide password" : "show"}</button>
                 </Form.Group>
                 <Form.Group >
                     <Form.Label>Re-Enter your password</Form.Label>
-                    <Form.Control type="password" placeholder="Re-Enter your password" />
+                    <Form.Control type={reEnterpasswordVisibility ? "text" : "password"} placeholder=" Re-Enter your password" />
+                    <button type="button" onClick={() => setReEnterPasswordVisibility(!reEnterpasswordVisibility)}>{reEnterpasswordVisibility ? "hide password" : "show"}</button>
                 </Form.Group>
                 <br />
                 <Button type="submit">Submit</Button>
