@@ -29,7 +29,7 @@ const Con1 = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting, isDirty },
+        formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',
@@ -42,10 +42,10 @@ const Con1 = () => {
         console.log(data);
         history.push("/LastPage")
     });
-    const [passwordVisibility, setPasswordVisibility] = useState(false)
+    const [passwordVisibility] = useState(false)
 
     const [radioValue, setRadioValue] = useState('1');
-    const [radioValue1, setRadioValue1] = useState('1');
+    // const [radioValue1, setRadioValue1] = useState('1');
 
 
     const radios = [

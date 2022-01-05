@@ -26,7 +26,7 @@ const SignInForm = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting, isDirty },
+        formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',
