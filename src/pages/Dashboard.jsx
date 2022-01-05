@@ -1,61 +1,33 @@
-import React, { useState } from 'react'
-import { courseName } from '../Data/dasboard_dummyData';
-import Modal from 'react-bootstrap/Modal'
-import { Button, Container } from 'react-bootstrap';
-import { Row, Col } from 'react-bootstrap'
+import React from 'react'
+
+
+import { Row, Col } from 'react-bootstrap';
+import DashBoardCom from "../components/DashBoardCom";
+
 
 const Dashboard = () => {
-    const [passcode, setpasscode] = useState("")
-    const [selectedCourse, setselectedCourse] = useState("")
 
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-
-
-    const generatePassword = () => {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < 8; i++) {
-            result += characters.charAt(Math.floor(Math.random() *
-                charactersLength));
-        }
-        setpasscode(result)
-
-
-    }
     return (
-        <Container>
+        <div >
+            <div>
+                <div className="App">
+
+                    <Row className="mb-4">
+                        <Col ><DashBoardCom /></Col>
+
+                        <Col>
+                            <div className='bg' style={{ height: 1000 }}>
+                                <div className='con mt-5'><h1 className="text-center" > Attendance Tracker</h1></div>
+
+                            </div>
+                        </Col>
+                    </Row>
+                </div>
 
 
 
-
-
-
-
-            <button onClick={() => generatePassword()}>Generate Passcode</button>
-            {passcode}
-            {courseName.map((v, i) => (<div key={i}>{v.name}
-                <button onClick={() => { setselectedCourse(v); setShow(true) }}>Delete</button></div>
-
-            ))}
-
-
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Are you Sure,you want to delete {selectedCourse.name}</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            </div>
+        </div>
 
 
 
@@ -64,9 +36,10 @@ const Dashboard = () => {
 
 
 
-        </Container>
+
 
     )
 }
 
 export default Dashboard
+

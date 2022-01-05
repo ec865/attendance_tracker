@@ -1,1 +1,1 @@
-export const courseName = [{ name: "Cloud Computing" }, { name: "Opp in c++" }, { name: "Software System Design" }, { name: "RMPI" }]
+export const courseName = [{ name: "Cloud Computing" }, { name: "Object Oriented Programming in c++" }, { name: "Software System Design" }, { name: "Research Methods And Professional Issues" }]
