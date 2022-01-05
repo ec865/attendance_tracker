@@ -1,0 +1,1 @@
+export const courseName = [{ name: "Cloud Computing" }, { name: "Opp in c++" }, { name: "Software System Design" }, { name: "RMPI" }]

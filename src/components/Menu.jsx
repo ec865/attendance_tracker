@@ -6,7 +6,7 @@ const Menu = () => {
         <div>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand href="#home">AttendanceTracker </Navbar.Brand>
+                    <Navbar.Brand href="/">AttendanceTracker </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
@@ -23,7 +23,7 @@ const Menu = () => {
                         <Nav>
                             <Nav.Link href="/SignUp">SIGN UP</Nav.Link>
                             <Nav.Link href="/SignIn">SIGN IN</Nav.Link>
-                            <Nav.Link href="#deets">SIGN OUT</Nav.Link>
+                            <Nav.Link href="/">SIGN OUT</Nav.Link>
 
 
                         </Nav>

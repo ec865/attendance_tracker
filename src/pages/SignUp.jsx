@@ -8,11 +8,14 @@ const SignUp = () => {
         <div>
             <div className="App">
 
-                <Row className="landing">
+                <Row className="mb-4">
                     <Col ><SignUpForm /></Col>
 
                     <Col>
-                        <Image src="./img/bg.jpg" thumbnail style={{ border: "none" }} />
+                        <div className='bg' style={{ height: 1000 }}>
+                            <div className='con mt-5'><h1 className="text-center" > Attendance Tracker</h1></div>
+
+                        </div>
                     </Col>
 
 
