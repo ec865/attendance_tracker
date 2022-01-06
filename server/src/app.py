@@ -1,5 +1,5 @@
 from flask import Flask, request
-
+from flask_cors import CORS, cross_origin
 
 import os
 import time
@@ -93,14 +93,14 @@ def list_attendances():
 
 
 app = Flask(__name__)
-
-
+CORS(app)
 
 def format_server_time():
     server_time = time.localtime()
     return time.strftime("%I:%M:%S %p", server_time)
 
 @app.route('/', methods=['GET', 'POST'])
+@cross_origin()
 def index():
     context = { 
         'users' : list_users(),
@@ -111,6 +111,7 @@ def index():
     return context
 
 @app.route('/api/signin', methods=['POST'])
+@cross_origin()
 def sign_in():
     email = request.args.get('email')
     password = request.args.get('password')
@@ -126,6 +127,7 @@ def sign_in():
     return "404"
 
 @app.route('/api/signup', methods=['POST'])
+@cross_origin()
 def sign_up():
     name = request.args.get('name')
     surname = request.args.get('surname')
@@ -136,6 +138,7 @@ def sign_up():
     return "user " + name + " added"
 
 @app.route('/api/events/<string:user_id>', methods=['GET', 'POST'])
+@cross_origin()
 def events(user_id):
     #current_user = request.args.get('user_id')
     docs = db.collection(u'events').where(u'user_id', u'==', user_id).stream()
@@ -145,6 +148,7 @@ def events(user_id):
     return json.dumps(events_of_user)
 
 @app.route('/api/descriptions', methods=['GET', 'POST'])
+@cross_origin()
 def descriptions():
     event_id = request.args.get('event_id')
     docs = db.collection(u'description').where(u'event_id', u'==', event_id).stream()

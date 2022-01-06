@@ -1,11 +1,13 @@
 # 1 
-FROM python:3.7
+FROM python:3.8
+#FROM node:17.3.0
 
 # 2
 RUN pip install Flask gunicorn
 RUN pip install firebase-admin
-RUN npm install
-RUN yarn install
+RUN pip install -U flask-cors
+#RUN npm install
+#RUN yarn install
 
 # 3
 COPY src/ /app
