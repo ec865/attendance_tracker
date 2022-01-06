@@ -117,9 +117,9 @@ def sign_in():
         if email == user.get('email'):
             if password == user.get('password'):
                 if user.get('role') == '1':
-                    return "admin" , set_current_user(user.id)
+                    return "admin"
                 else:
-                    return "user", set_current_user(user.id)
+                    return "user"
     return "404"
 
 @app.route('/api/signup', methods=['POST'])
