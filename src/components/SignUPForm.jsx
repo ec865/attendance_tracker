@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 
 
@@ -16,10 +17,10 @@ import { useHistory } from 'react-router-dom';
 // });
 
 const validationSchema = Yup.object().shape({
-    fname: Yup.string()
+    name: Yup.string()
         .trim()
         .required('Required'),
-    lname: Yup.string()
+    surname: Yup.string()
         .trim()
         .required('Required'),
     email: Yup.string().trim().lowercase().required('Required'),
@@ -32,6 +33,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignUpForm = () => {
+    const [signUpError, setsignUpError] = useState("")
     const history = useHistory()
 
     const {
@@ -42,8 +44,8 @@ const SignUpForm = () => {
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',
         defaultValues: {
-            fname: '',
-            lname: '',
+            name: '',
+            surname: '',
             password: '',
             reEnterPassword: '',
             email: ''
@@ -51,7 +53,15 @@ const SignUpForm = () => {
     });
     const onSubmit = handleSubmit(async ({ reEnterPassword, ...data }) => {
         console.log(data);
-        history.push("/SignIn")
+        try {
+            await axios.post(`localhost:8080/api/signup?email=${data.email}&name=${data.name}&surname=${data.surname}&password=${data.password}&role=0`)
+            history.push("/SignIn")
+        }
+        catch {
+            setsignUpError("Failed to Sign Up")
+
+        }
+
     });
 
     const [passwordVisibility, setPasswordVisibility] = useState(false)
@@ -64,17 +74,17 @@ const SignUpForm = () => {
             <Form onSubmit={onSubmit} >
                 <Form.Group className='mt-1' style={{ width: "69.5%", marginLeft: "10%", marginTop: "10%" }}>
                     {/* <Form.Label>First Name</Form.Label> */}
-                    <Form.Control type="fname" placeholder="Frist Name" {...register("fname")} />
-                    {errors.fname && (
-                        <p className="text-red-500 text-sm font-semibold mt-1">{errors.fname.message}</p>
+                    <Form.Control type="name" placeholder="Frist Name" {...register("name")} />
+                    {errors.name && (
+                        <p className="text-red-500 text-sm font-semibold mt-1">{errors.name.message}</p>
                     )}
 
                 </Form.Group>
                 <Form.Group className='mt-1' style={{ width: "69.5%", marginLeft: "10%", marginTop: "10%" }}>
                     {/* <Form.Label>Last Name</Form.Label> */}
-                    <Form.Control type="lname" placeholder="Last Name"  {...register("lname")} />
-                    {errors.lname && (
-                        <p className="text-red-500 text-sm font-semibold mt-1">{errors.lname.message}</p>
+                    <Form.Control type="surname" placeholder="Last Name"  {...register("surname")} />
+                    {errors.surname && (
+                        <p className="text-red-500 text-sm font-semibold mt-1">{errors.surname.message}</p>
                     )}
                 </Form.Group>
                 <Form.Group className='mt-1' style={{ width: "69.5%", marginLeft: "10%", marginTop: "10%" }}>
@@ -111,6 +121,9 @@ const SignUpForm = () => {
                 <br />
                 <Button type="submit" className='mt-1' style={{ width: "20%", marginLeft: "10%", marginTop: "10%", backgroundColor: "#703F3F" }}>Submit</Button>
             </Form>
+            <p>{signUpError}</p>
+
+
         </div>
 
     )
