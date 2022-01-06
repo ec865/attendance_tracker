@@ -52,8 +52,8 @@ def list_events():
         events[event.id] = event.to_dict()
     return json.loads(json.dumps(events))
 
-def delete_event(event):
-    db.collection(u'events').document(event).delete()
+def delete_event(event_id):
+    db.collection(u'events').document(event_id).delete()
 
 def add_description(des_name, passcode, status, start_time, end_time, event_id):
     des = db.collection(u'description').document(event_id + '_' + des_name)
@@ -154,6 +154,11 @@ def a_event(user_id):
     event_name = request.args.get('event_name')
     return "event added" , add_event(event_name, user_id)
 
+@app.route('/api/events/delete', methods=['DELETE'])
+@cross_origin()
+def d_event():
+    event_id= request.args.get('event_id')
+    return "event deleted" , delete_event(event_id)
 
 @app.route('/api/descriptions', methods=['GET'])
 @cross_origin()
