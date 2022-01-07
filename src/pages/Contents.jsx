@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { eventDummyData } from '../Data/event_dumyData'
+import { removeAccessToken, getToken } from '../utils';
+
 
 const Contents = () => {
     const [eventData, seteventData] = useState()
@@ -12,6 +14,9 @@ const Contents = () => {
 
 
     }, [])
+
+    const user = getToken()
+    console.log(user)
     return (
 
 

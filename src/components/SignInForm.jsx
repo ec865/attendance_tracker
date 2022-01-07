@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import { removeAccessToken, setAccessToken ,setAccessRole} from '../utils';
 
 
 // interface IData {
@@ -62,7 +63,10 @@ const SignInForm = () => {
                 }
                 else {
                     history.push("/Contents")
+
                 }
+                setAccessToken(response.data);
+                setAccessRole(response.data.role);
             }
 
 
@@ -79,21 +83,7 @@ const SignInForm = () => {
     });
 
 
-    // const onSubmit = handleSubmit(async ({ reEnterPassword, ...data }) => {
-    //     console.log(data);
-    //     try {
-    //         await axios.post(`http://127.0.0.1:8080/api/signup?email=${data.email}&name=${data.name}&surname=${data.surname}&password=${data.password}&role=0`)
-    //         history.push("/SignIn")
-    //     }
-    //     catch {
-
-    //         setsignUpError("Failed to Sign Up")
-
-
-
-    //     }
-
-    // });
+    
     const [passwordVisibility, setPasswordVisibility] = useState(false)
     return (
         <div>

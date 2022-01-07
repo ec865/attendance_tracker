@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { courseName } from '../Data/dasboard_dummyData';
 import Modal from 'react-bootstrap/Modal'
 import { Button, Container, Row, Form } from 'react-bootstrap';
@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import Col from 'react-bootstrap/Col'
 import axios from 'axios';
+import { removeAccessToken, getToken } from '../utils';
 
 
 
@@ -63,129 +64,57 @@ const DashBoardCom = () => {
 
     });
 
+    const [eventData, seteventData] = useState()
+    useEffect(() => {
+
+        axios.get(`http://127.0.0.1:8080/api/events`).then((res) => seteventData(res.data))
 
 
-    // const generatePassword = () => {
-    //     var result = '';
-    //     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    //     var charactersLength = characters.length;
-    //     for (var i = 0; i < 8; i++) {
-    //         result += characters.charAt(Math.floor(Math.random() *
-    //             charactersLength));
-    //     }
-    //     setpasscode(result)
+    }, [])
 
 
-    // }
+   
     return (
         <Container className=' text-center pt-5  mb-2 ' >
 
 
-            {/* <div  >
-
-                {courseName.map((v, i) => (<div key={i}>
-
-                    {v.event_name}
-                    <div className=' d-flex justify-content-end'>
-                        <Button onClick={() => { setselectedCourse(v); setShow(true) }} style={{ width: "20%", backgroundColor: "#703F3F" }}>Delete</Button></div>
-
-
-                </div>
-                ))}
-
-            </div> */}
 
 
             <div className='con mt-5'><p className=" text-center" >Attendance Tracker</p></div>
 
-            <Row>
-                <Col><ListGroup className='center mt-5 pd-5  d-flex justify-content-end'>
-                    {DasheventDummyData.map((v, i) => (
+            
+                <ListGroup className='center mt-5 pd-5  d-flex justify-content-end'>
+                    {eventData?eventData.map((v, i) => (
 
-
-                        <ListGroup.Item key={i} action href={`DashBoard/${v.dash_event_id}`} variant="secondary" >{v.dash_event_name}
-
-
-
-
+                        <div key={i} className='center mt-5 pd-5  d-flex justify-content-end' >
+                        <ListGroup.Item action href={`DashBoard/${v.event_id}`} variant="secondary" >{v.event_name}
+                            
 
 
                         </ListGroup.Item>
+                         <Button onClick={() => { setselectedCourse(v); setShow(true) }} style={{ width: "20%", backgroundColor: "#703F3F" }}>Delete</Button>
+                      
+
+                        </div>
+
+
+                    ) )   : <p>no data found</p>}
 
 
 
 
+               
+
+
+           
 
 
 
+            
 
 
-
-
-
-                    ))}
-
-
-
-
-                </ListGroup></Col>
-                <Col>
-                    <ListGroup className='center mt-4 pd-5  d-flex justify-content-end'>
-                        {DasheventDummyData.map((v, i) => (
-
-
-                            <ListGroup.Item key={i} variant="secondary" >
-
-                                <Button onClick={() => { setselectedCourse(v); setShow(true) }} style={{ width: "20%", backgroundColor: "#703F3F" }}>Delete</Button>
-
-
-
-
-
-
-
-                            </ListGroup.Item>
-
-
-
-
-
-
-
-
-
-
-
-
-                        ))}
-
-
-
-
-                    </ListGroup>
-
-
-                </Col>
-
-
-            </Row>
-
-
-
-            {/* <ListGroup>
-
-                {DasheventDummyData.map((v, i) => (<div key={i}>
-
-
-                    <div className=' d-flex justify-content-end'>
-                        <Button onClick={() => { setselectedCourse(v); setShow(true) }} style={{ width: "20%", backgroundColor: "#703F3F" }}>Delete</Button></div>
-
-
-                </div>
-                ))}
-
-
-            </ListGroup> */}
+            </ListGroup> 
+            
             <br />
 
 
