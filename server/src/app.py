@@ -118,12 +118,11 @@ def event_exists(event_id):
         return True
     return False
 
-def add_description(des_name, passcode, status, start_time, end_time, event_id):
+def add_description(des_name, passcode, start_time, end_time, event_id):
     des = db.collection(u'description').document(event_id + '_' + des_name)
     des.set({
         u'description_name': des_name,
         u'passcode': passcode,
-        u'status' : status,
         u'start_time': start_time,
         u'end_time': end_time,
         u'event_id' : event_id
@@ -138,7 +137,6 @@ def list_descriptions():
             'description_id' : des.id,
             'description_name': des.get('description_name'),
             'passcode': des.get('passcode'),
-            'status' : des.get('status'),
             'start_time': des.get('start_time'),
             'end_time': des.get('end_time'),
             'event_id' : des.get('event_id')
@@ -153,7 +151,6 @@ def list_descriptions_by_event_id(event_id):
             'description_id' : des.id,
             'description_name': des.get('description_name'),
             'passcode': des.get('passcode'),
-            'status' : des.get('status'),
             'start_time': des.get('start_time'),
             'end_time': des.get('end_time'),
             'event_id' : des.get('event_id')
@@ -168,7 +165,6 @@ def list_description_by_description_id(des_id):
         'description_id' : des.id,
         'description_name': des.get('description_name'),
         'passcode': des.get('passcode'),
-        'status' : des.get('status'),
         'start_time': des.get('start_time'),
         'end_time': des.get('end_time'),
         'event_id' : des.get('event_id')
@@ -188,11 +184,12 @@ def get_description_passcode(des_id):
     passcode = doc.get('passcode')
     return passcode
 
-def add_attendance(user_id, description_id):
+def add_attendance(status, user_id, description_id):
     att = db.collection(u'attendance').document(user_id + '_' + description_id)
     att.set({
-        u'user_id': user_id,
-        u'description_id': description_id
+        'status' : status,
+        'user_id': user_id,
+        'description_id': description_id
     })      
 
 def list_attendances():
@@ -202,6 +199,7 @@ def list_attendances():
     for att in att_docs:
         atts.append({
             'attendance_id' : att.id,
+            'status' : att.get('status'),
             'user_id': att.get('user_id'),
             'description_id': att.get('description_id')
         })
@@ -213,6 +211,7 @@ def list_attendances_by_user(user_id):
     for att in docs:
         atts.append({
             'attendance_id' : att.id,
+            'status' : att.get('status'),
             'user_id': att.get('user_id'),
             'description_id': att.get('description_id')
         })
@@ -224,6 +223,7 @@ def list_attendances_by_description_id(des_id):
     for att in docs:
         atts.append({
             'attendance_id' : att.id,
+            'status' : att.get('status'),
             'user_id': att.get('user_id'),
             'description_id': att.get('description_id')
         })
@@ -235,6 +235,7 @@ def list_attedances_by_user_description(user_id, des_id):
     for att in docs:
         atts.append({
             'attendance_id' : att.id,
+            'status' : att.get('status'),
             'user_id': att.get('user_id'),
             'description_id': att.get('description_id')
         })
@@ -359,11 +360,10 @@ def description_by_description_id(des_id):
 def a_description(event_id):
     des_name = request.args.get('des_name')
     passcode = request.args.get('passcode')
-    status = request.args.get('status')
     start_time = request.args.get('start_time')
     end_time = request.args.get('end_time')
     if (event_exists(event_id)):
-        return "description added" , add_description(des_name, passcode, status, start_time, end_time, event_id)
+        return "description added" , add_description(des_name, passcode, start_time, end_time, event_id)
     return "event does not exist, please check the event_id" , 404
 
 #Lists all attendances in the database
@@ -395,9 +395,10 @@ def a_attedances(user_id, des_id):
             actual_passcode = get_description_passcode(des_id)
             passcode = request.args.get('passcode')
             if (passcode == actual_passcode):
+                status = request.args.get('status')
                 if (attendance_exists(user_id + '_' + des_id)):    
                     return "this user has already submitted their attendance to this event"
-                return "user's attendance added" , add_attendance(user_id, des_id)
+                return "user's attendance added" , add_attendance(status, user_id, des_id)
             return "passcodes do not match"
         return "description does not exist, please check the description_id" , 404
     return "user does not exist, please check the user_id" , 404
