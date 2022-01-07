@@ -32,10 +32,24 @@ def add_user(name, surname, email, password, role):
 def list_users():
     users = db.collection(u'users')
     user_docs = users.stream()
-    users = {}
+    users = []
     for user in user_docs:
-        users[user.id] = user.to_dict()
-    return json.loads(json.dumps(users))
+        users.append({
+            'user_id' : user.id,
+            'name': user.get('name'),
+            'surname': user.get('surname'),
+            'email': user.get('email'),
+            'password' : user.get('password'),
+            'role' : user.get('role')
+        })
+    return json.dumps(users)
+
+def user_email_exists(email):
+    docs = db.collection(u'users').where(u'email', u'==', email).stream()
+    for user in docs:
+        if user.exists:
+            return True
+    return False
 
 def add_event(name, user_id):
     event = db.collection(u'events').document(name + '_' + user_id)
@@ -202,16 +216,16 @@ CORS(app)
 
 ########################### API ##############################
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 @cross_origin()
 def index():
     context = { 
-        'users' : list_users(),
-        'events' : list_events(),
-        'descriptions' : list_descriptions(),
-        'attendances' : list_attendances()
+        'users' : json.loads(list_users()),
+        'events' : json.loads(list_events()),
+        'descriptions' : json.loads(list_descriptions()),
+        'attendances' : json.loads(list_attendances())
     }
-    return context
+    return json.dumps(context)
 #Sign in
 @app.route('/api/signin', methods=['POST'])
 @cross_origin()
@@ -228,7 +242,7 @@ def sign_in():
                     'surname' : user.get('surname'),
                     'role' : user.get('role')
                 }
-    return "404"
+    return "email or password is wrong", 404
 #Sign up
 @app.route('/api/signup', methods=['POST'])
 @cross_origin()
@@ -238,8 +252,16 @@ def sign_up():
     email = request.args.get('email')
     password = request.args.get('password')
     role = request.args.get('role')
+    if (user_email_exists(email)):
+        return "this email is in use, please choose another email"
     add_user(name, surname, email, password, role)
-    return "User " + name + " added"
+    return "User " + name + " added" 
+
+#Lists all users in the database
+@app.route('/api/users', methods=['GET'])
+@cross_origin()
+def l_users():
+    return list_users()
 
 #Lists all events in the database
 @app.route('/api/events', methods=['GET'])
