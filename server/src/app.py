@@ -116,10 +116,11 @@ def sign_in():
     for user in user_docs:
         if email == user.get('email'):
             if password == user.get('password'):
-                if user.get('role') == '1':
-                    return "admin"
-                else:
-                    return "user"
+                return {
+                    'name' : user.get('name'),
+                    'surname' : user.get('surname'),
+                    'role' : user.get('role')
+                }
     return "404"
 
 @app.route('/api/signup', methods=['POST'])
