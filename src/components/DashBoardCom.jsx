@@ -1,13 +1,24 @@
 import React, { useState } from 'react'
 import { courseName } from '../Data/dasboard_dummyData';
 import Modal from 'react-bootstrap/Modal'
-import { Button, Container, Row } from 'react-bootstrap';
+import { Button, Container, Row, Form } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup'
 import { DasheventDummyData } from '../Data/dasboard_dummyData'
-
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 import Col from 'react-bootstrap/Col'
+import axios from 'axios';
 
 
+
+
+const validationSchema = Yup.object().shape({
+    name: Yup.string()
+        .trim()
+        .required('Required'),
+
+});
 
 
 
@@ -17,9 +28,40 @@ const DashBoardCom = () => {
 
 
     const [show, setShow] = useState(false);
+    const [addEvent, setAddEvent] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting, isDirty },
+    } = useForm({
+        resolver: yupResolver(validationSchema),
+        mode: 'onBlur',
+        defaultValues: {
+            name: '',
+
+        }
+    });
+
+    const onSubmit = handleSubmit(async (data) => {
+        console.log(data);
+        setAddEvent(false);
+        try {
+
+
+        }
+        catch {
+
+
+
+
+
+        }
+
+    });
 
 
 
@@ -158,23 +200,34 @@ const DashBoardCom = () => {
 
             </Modal>
 
-            <div><Button onClick={handleShow} style={{ width: "20%", backgroundColor: "#703F3F" }}>
-                ADD Course
+            <div><Button onClick={() => setAddEvent(true)} style={{ width: "20%", backgroundColor: "#703F3F" }}>
+                ADD Event
             </Button>
 
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        {/* <Modal.Title>Modal heading</Modal.Title> */}
-                    </Modal.Header>
-                    {/* <Modal.Body>Are you sure, are going to add a  new Course ?</Modal.Body> */}
-                    <Modal.Footer>
-                        <Button onClick={handleClose} style={{ width: "20%", backgroundColor: "#703F3F" }}>
-                            Close
-                        </Button>
-                        <Button onClick={handleClose} style={{ width: "40%", backgroundColor: "#703F3F" }}>
-                            Save Changes
-                        </Button>
-                    </Modal.Footer>
+                <Modal show={addEvent} onHide={() => setAddEvent(false)}>
+                    <Form onSubmit={onSubmit} >
+
+
+                        <Modal.Header closeButton>
+
+
+                            <Modal.Title>Modal heading</Modal.Title>
+                        </Modal.Header>
+                        {/* <Modal.Body>Are you sure, are going to add a  new Course ?</Modal.Body> */}
+                        <Form.Group className='mt-1' style={{ width: "69.5%", marginLeft: "10%", marginTop: "10%" }}>
+                            <Form.Control type="text" placeholder="Add Event" {...register("name")} />
+                            <Modal.Footer>
+                                <Button onClick={() => setAddEvent(false)} style={{ width: "20%", backgroundColor: "#703F3F" }}>
+                                    Close
+                                </Button>
+                                <Button type="submit" style={{ width: "40%", backgroundColor: "#703F3F" }}>
+                                    Save Changes
+                                </Button>
+
+                            </Modal.Footer>
+                        </Form.Group>
+                    </Form>
+
                 </Modal>
             </div>
 

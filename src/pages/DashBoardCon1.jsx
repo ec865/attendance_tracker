@@ -35,6 +35,7 @@ const DashBoardCon1 = () => {
         mode: 'onBlur',
         defaultValues: {
             password: '',
+            description_name: ''
 
         }
     });
@@ -43,7 +44,7 @@ const DashBoardCon1 = () => {
         history.push("/LastPage")
     });
     const [passwordVisibility] = useState(false)
-    const [description] = useState(false)
+    const [description_name] = useState(false)
 
 
     const [radioValue, setRadioValue] = useState('1');
@@ -66,6 +67,9 @@ const DashBoardCon1 = () => {
                             <th>Description</th>
 
                             <th>Passcode</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
 
@@ -75,7 +79,7 @@ const DashBoardCon1 = () => {
                             <td>
                                 <Form.Group >
 
-                                    <Form.Control type="description" placeholder="Enter your Description" {...register("description")} />
+                                    <Form.Control type="description" placeholder="Enter your Description" {...register("description_name")} />
 
 
                                 </Form.Group>
@@ -95,6 +99,44 @@ const DashBoardCon1 = () => {
                                     {errors.password && (
                                         <p className="text-red-500 text-sm font-semibold mt-1">{errors.password.message}</p>
                                     )}
+
+                                </Form.Group>
+
+                            </td>
+
+
+
+                            <td>
+
+
+                                <Form.Group >
+
+                                    <Form.Control type="time" placeholder="Enter Start Time" {...register("start_time")} />
+
+
+                                </Form.Group>
+
+                            </td>
+
+                            <td>
+
+
+                                <Form.Group >
+
+                                    <Form.Control type="time" placeholder="Enter End Time" {...register("end_time")} />
+
+
+                                </Form.Group>
+
+                            </td>
+
+                            <td>
+
+
+                                <Form.Group >
+
+                                    <Form.Control type="date" placeholder="Enter End Time" {...register("date")} />
+
 
                                 </Form.Group>
 

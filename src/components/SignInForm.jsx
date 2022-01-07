@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 
 // interface IData {
@@ -21,6 +22,8 @@ const validationSchema = Yup.object().shape({
 
 
 const SignInForm = () => {
+
+    const [signInError, setsignInError] = useState("")
     const history = useHistory()
 
     const {
@@ -38,13 +41,46 @@ const SignInForm = () => {
     const onSubmit = handleSubmit(async (data) => {
         console.log(data);
 
-        if (data.email === "admin@city.edu") {
+        // if (data.email === "admin@city.edu") {
+        //     history.push("/dashboard")
+        // }
+        // else {
+        //     history.push("/Contents")
+        // }
+        try {
+
+            const response = await axios.post(`http://127.0.0.1:8080/api/signin?email=${data.email} &password=${data.password}`)
+            console.log(response)
             history.push("/dashboard")
+
+
+
+            // history.push("/Contents")
+
+
+
         }
-        else {
-            history.push("/Contents")
+        catch {
+            setsignInError("Failed to Sign In")
         }
     });
+
+
+    // const onSubmit = handleSubmit(async ({ reEnterPassword, ...data }) => {
+    //     console.log(data);
+    //     try {
+    //         await axios.post(`http://127.0.0.1:8080/api/signup?email=${data.email}&name=${data.name}&surname=${data.surname}&password=${data.password}&role=0`)
+    //         history.push("/SignIn")
+    //     }
+    //     catch {
+
+    //         setsignUpError("Failed to Sign Up")
+
+
+
+    //     }
+
+    // });
     const [passwordVisibility, setPasswordVisibility] = useState(false)
     return (
         <div>
@@ -74,6 +110,8 @@ const SignInForm = () => {
                 <br />
                 <Button type="submit" style={{ width: "20%", backgroundColor: "#703F3F" }}>Submit</Button>
             </Form>
+
+            <p>{signInError}</p>
         </div>
     )
 }
