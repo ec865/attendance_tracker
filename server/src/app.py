@@ -54,8 +54,29 @@ def list_events():
             'event_name' : event.get('event_name'),
             'user_id' : event.get('user_id')
         })
-    print(events)
     return json.dumps(events)
+
+def list_events_by_user_id(user_id):
+    docs = db.collection(u'events').where(u'user_id', u'==', user_id).stream()
+    events = []
+    for event in docs:
+        events.append({
+            'event_id' : event.id,
+            'event_name' : event.get('event_name'),
+            'user_id' : event.get('user_id')
+        })
+    return json.dumps(events)
+
+def list_events_by_event_id(event_id):
+    docs = db.collection(u'events').document(event_id)
+    event_list = []
+    event = docs.get()
+    event_list.append({
+        'event_id' : event.id,
+        'event_name' : event.get('event_name'),
+        'user_id' : event.get('user_id')
+    })
+    return json.dumps(event_list)
 
 def delete_event(event_id):
     db.collection(u'events').document(event_id).delete()
@@ -138,28 +159,28 @@ def sign_up():
     role = request.args.get('role')
     add_user(name, surname, email, password, role)
     return "User " + name + " added"
-
+#Lists all events in the database
 @app.route('/api/events', methods=['GET'])
 @cross_origin()
 def l_events():
     return list_events()
-
-@app.route('/api/events/<string:user_id>', methods=['GET'])
+#Lists events that belong to a user
+@app.route('/api/events/u/<string:user_id>', methods=['GET'])
 @cross_origin()
-def events(user_id):
-    #current_user = request.args.get('user_id')
-    docs = db.collection(u'events').where(u'user_id', u'==', user_id).stream()
-    events_of_user = {}
-    for event in docs:
-        events_of_user[event.id] = event.to_dict()
-    return json.dumps(events_of_user)
-
+def events_by_user_id(user_id):
+    return list_events_by_user_id(user_id)
+#Lists the event by the given event_id
+@app.route('/api/events/e/<string:event_id>', methods=['GET'])
+@cross_origin()
+def events_by_event_id(event_id):
+    return list_events_by_event_id(event_id)
+#Adds a new event
 @app.route('/api/events/<string:user_id>/add', methods=['POST'])
 @cross_origin()
 def a_event(user_id):
     event_name = request.args.get('event_name')
     return "event added" , add_event(event_name, user_id)
-
+#Deletes an event
 @app.route('/api/events/delete', methods=['DELETE'])
 @cross_origin()
 def d_event():
