@@ -47,10 +47,15 @@ def add_event(name, user_id):
 def list_events():
     events = db.collection(u'events')
     event_docs = events.stream()
-    events = {}
+    events = []
     for event in event_docs:
-        events[event.id] = event.to_dict()
-    return json.loads(json.dumps(events))
+        events.append({
+            'event_id' : event.id,
+            'event_name' : event.get('event_name'),
+            'user_id' : event.get('user_id')
+        })
+    print(events)
+    return json.dumps(events)
 
 def delete_event(event_id):
     db.collection(u'events').document(event_id).delete()
