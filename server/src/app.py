@@ -2,9 +2,7 @@ from flask import Flask, request
 from flask_cors import CORS, cross_origin
 
 import os
-import time
 import json
-
 
 import firebase_admin
 from firebase_admin import credentials
@@ -12,12 +10,9 @@ from firebase_admin import firestore
 
 # Use the application default credentials
 cred = credentials.Certificate("attendancetracker-239b2-firebase-adminsdk-49im3-73a41092ad.json")
-firebase_admin.initialize_app(cred, {
-  'projectId': "attendancetracker-239b2",
-})
+firebase_admin.initialize_app(cred, {'projectId': "attendancetracker-239b2",})
 
 db = firestore.client()
-
 
 def add_user(name, surname, email, password, role):
     user = db.collection(u'users').document(name + '_' + surname)
@@ -43,6 +38,27 @@ def list_users():
             'role' : user.get('role')
         })
     return json.dumps(users)
+
+def list_user_by_user_id(user_id):
+    docs = db.collection(u'users').document(user_id)
+    user_list = []
+    user = docs.get()
+    user_list.append({
+        'user_id' : user.id,
+        'name': user.get('name'),
+        'surname': user.get('surname'),
+        'email': user.get('email'),
+        'password' : user.get('password'),
+        'role' : user.get('role')
+    })
+    return json.dumps(user_list)
+
+def user_exists(user_id):
+    docs = db.collection(u'users').document(user_id)
+    user = docs.get()
+    if user.exists:
+        return True
+    return False
 
 def user_email_exists(email):
     docs = db.collection(u'users').where(u'email', u'==', email).stream()
@@ -94,6 +110,13 @@ def list_events_by_event_id(event_id):
 
 def delete_event(event_id):
     db.collection(u'events').document(event_id).delete()
+
+def event_exists(event_id):
+    docs = db.collection(u'events').document(event_id)
+    event = docs.get()
+    if event.exists:
+        return True
+    return False
 
 def add_description(des_name, passcode, status, start_time, end_time, event_id):
     des = db.collection(u'description').document(event_id + '_' + des_name)
@@ -151,6 +174,13 @@ def list_description_by_description_id(des_id):
         'event_id' : des.get('event_id')
     })
     return json.dumps(des_list)
+
+def description_exists(des_id):
+    docs = db.collection(u'description').document(des_id)
+    des = docs.get()
+    if des.exists:
+        return True
+    return False
 
 def get_description_passcode(des_id):
     docs = db.collection(u'description').document(des_id)
@@ -210,6 +240,13 @@ def list_attedances_by_user_description(user_id, des_id):
         })
     return json.dumps(atts)
 
+def attendance_exists(att_id):
+    docs = db.collection(u'attendance').document(att_id)
+    att = docs.get()
+    if att.exists:
+        return True
+    return False
+
 
 app = Flask(__name__)
 CORS(app)
@@ -226,6 +263,7 @@ def index():
         'attendances' : json.loads(list_attendances())
     }
     return json.dumps(context)
+
 #Sign in
 @app.route('/api/signin', methods=['POST'])
 @cross_origin()
@@ -263,6 +301,11 @@ def sign_up():
 def l_users():
     return list_users()
 
+@app.route('/api/users/<string:user_id>', methods=['GET'])
+@cross_origin()
+def user_by_user_id(user_id):
+    return list_user_by_user_id(user_id)
+
 #Lists all events in the database
 @app.route('/api/events', methods=['GET'])
 @cross_origin()
@@ -283,13 +326,17 @@ def event_by_event_id(event_id):
 @cross_origin()
 def a_event(user_id):
     event_name = request.args.get('event_name')
-    return "event added" , add_event(event_name, user_id)
+    if (user_exists(user_id)):
+        return "event added" , add_event(event_name, user_id)
+    return "user does not exist, please check the user_id" , 404
 #Deletes an event
 @app.route('/api/events/delete', methods=['DELETE'])
 @cross_origin()
 def d_event():
     event_id= request.args.get('event_id')
-    return "event deleted" , delete_event(event_id)
+    if (event_exists(event_id)):
+        return "event deleted" , delete_event(event_id)
+    return "event not found" , 404
 
 #Lists all descriptions in the database
 @app.route('/api/descriptions', methods=['GET'])
@@ -315,7 +362,9 @@ def a_description(event_id):
     status = request.args.get('status')
     start_time = request.args.get('start_time')
     end_time = request.args.get('end_time')
-    return "description added" , add_description(des_name, passcode, status, start_time, end_time, event_id)
+    if (event_exists(event_id)):
+        return "description added" , add_description(des_name, passcode, status, start_time, end_time, event_id)
+    return "event does not exist, please check the event_id" , 404
 
 #Lists all attendances in the database
 @app.route('/api/attendances', methods=['GET'])
@@ -341,11 +390,17 @@ def attedances_by_user_description(user_id, des_id):
 @app.route('/api/attendances/u/<string:user_id>/d/<string:des_id>/add', methods=['POST'])
 @cross_origin()
 def a_attedances(user_id, des_id):
-    actual_passcode = get_description_passcode(des_id)
-    passcode = request.args.get('passcode')
-    if (passcode == actual_passcode):
-        return "user's attendance added" , add_attendance(user_id, des_id)
-    return "passcodes do not match"
+    if (user_exists(user_id)):
+        if (description_exists(des_id)):
+            actual_passcode = get_description_passcode(des_id)
+            passcode = request.args.get('passcode')
+            if (passcode == actual_passcode):
+                if (attendance_exists(user_id + '_' + des_id)):    
+                    return "this user has already submitted their attendance to this event"
+                return "user's attendance added" , add_attendance(user_id, des_id)
+            return "passcodes do not match"
+        return "description does not exist, please check the description_id" , 404
+    return "user does not exist, please check the user_id" , 404
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
