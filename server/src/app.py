@@ -94,11 +94,55 @@ def add_description(des_name, passcode, status, start_time, end_time, event_id):
 
 def list_descriptions():
     descriptions = db.collection(u'description')
-    dec_docs = descriptions.stream()
-    des_of_event = {}
-    for des in dec_docs:
-        des_of_event[des.id] = des.to_dict()
-    return json.loads(json.dumps(des_of_event))
+    desc_docs = descriptions.stream()
+    des_list = []
+    for des in desc_docs:
+        des_list.append({
+            'description_id' : des.id,
+            'description_name': des.get('description_name'),
+            'passcode': des.get('passcode'),
+            'status' : des.get('status'),
+            'start_time': des.get('start_time'),
+            'end_time': des.get('end_time'),
+            'event_id' : des.get('event_id')
+        })
+    return json.dumps(des_list)
+
+def list_descriptions_by_event_id(event_id):
+    docs = db.collection(u'description').where(u'event_id', u'==', event_id).stream()
+    des_list = []
+    for des in docs:
+        des_list.append({
+            'description_id' : des.id,
+            'description_name': des.get('description_name'),
+            'passcode': des.get('passcode'),
+            'status' : des.get('status'),
+            'start_time': des.get('start_time'),
+            'end_time': des.get('end_time'),
+            'event_id' : des.get('event_id')
+        })
+    return json.dumps(des_list)
+
+def list_description_by_description_id(des_id):
+    docs = db.collection(u'description').document(des_id)
+    des_list = []
+    des = docs.get()
+    des_list.append({
+        'description_id' : des.id,
+        'description_name': des.get('description_name'),
+        'passcode': des.get('passcode'),
+        'status' : des.get('status'),
+        'start_time': des.get('start_time'),
+        'end_time': des.get('end_time'),
+        'event_id' : des.get('event_id')
+    })
+    return json.dumps(des_list)
+
+def get_description_passcode(des_id):
+    docs = db.collection(u'description').document(des_id)
+    doc = docs.get()
+    passcode = doc.get('passcode')
+    return passcode
 
 def add_attendance(user_id, description_id):
     att = db.collection(u'attendance').document(user_id + '_' + description_id)
@@ -110,16 +154,53 @@ def add_attendance(user_id, description_id):
 def list_attendances():
     attendances = db.collection(u'attendance')
     att_docs = attendances.stream()
-    att_dict = {}
+    atts = []
     for att in att_docs:
-        att_dict[att.id] = att.to_dict()
-    return json.loads(json.dumps(att_dict, default=str))    
+        atts.append({
+            'attendance_id' : att.id,
+            'user_id': att.get('user_id'),
+            'description_id': att.get('description_id')
+        })
+    return json.dumps(atts)    
+
+def list_attendances_by_user(user_id):
+    docs = db.collection(u'attendance').where(u'user_id', u'==', user_id).stream()
+    atts = []
+    for att in docs:
+        atts.append({
+            'attendance_id' : att.id,
+            'user_id': att.get('user_id'),
+            'description_id': att.get('description_id')
+        })
+    return json.dumps(atts)
+
+def list_attendances_by_description_id(des_id):
+    docs = db.collection(u'attendance').where(u'description_id', u'==', des_id).stream()
+    atts = []
+    for att in docs:
+        atts.append({
+            'attendance_id' : att.id,
+            'user_id': att.get('user_id'),
+            'description_id': att.get('description_id')
+        })
+    return json.dumps(atts)
+
+def list_attedances_by_user_description(user_id, des_id):
+    docs = db.collection(u'attendance').where(u'user_id', u'==', user_id).where(u'description_id', u'==', des_id).stream()
+    atts = []
+    for att in docs:
+        atts.append({
+            'attendance_id' : att.id,
+            'user_id': att.get('user_id'),
+            'description_id': att.get('description_id')
+        })
+    return json.dumps(atts)
 
 
 app = Flask(__name__)
 CORS(app)
 
-######################### API ############################
+########################### API ##############################
 
 @app.route('/', methods=['GET', 'POST'])
 @cross_origin()
@@ -131,7 +212,7 @@ def index():
         'attendances' : list_attendances()
     }
     return context
-
+#Sign in
 @app.route('/api/signin', methods=['POST'])
 @cross_origin()
 def sign_in():
@@ -148,7 +229,7 @@ def sign_in():
                     'role' : user.get('role')
                 }
     return "404"
-
+#Sign up
 @app.route('/api/signup', methods=['POST'])
 @cross_origin()
 def sign_up():
@@ -159,6 +240,7 @@ def sign_up():
     role = request.args.get('role')
     add_user(name, surname, email, password, role)
     return "User " + name + " added"
+
 #Lists all events in the database
 @app.route('/api/events', methods=['GET'])
 @cross_origin()
@@ -172,7 +254,7 @@ def events_by_user_id(user_id):
 #Lists the event by the given event_id
 @app.route('/api/events/e/<string:event_id>', methods=['GET'])
 @cross_origin()
-def events_by_event_id(event_id):
+def event_by_event_id(event_id):
     return list_events_by_event_id(event_id)
 #Adds a new event
 @app.route('/api/events/<string:user_id>/add', methods=['POST'])
@@ -187,20 +269,22 @@ def d_event():
     event_id= request.args.get('event_id')
     return "event deleted" , delete_event(event_id)
 
+#Lists all descriptions in the database
 @app.route('/api/descriptions', methods=['GET'])
 @cross_origin()
 def l_descriptions():
     return list_descriptions()
-
-@app.route('/api/descriptions/<string:event_id>', methods=['GET'])
+#Lists descriptions by event_id
+@app.route('/api/descriptions/e/<string:event_id>', methods=['GET'])
 @cross_origin()
-def descriptions(event_id):
-    docs = db.collection(u'description').where(u'event_id', u'==', event_id).stream()
-    des_of_event = {}
-    for des in docs:
-        des_of_event[des.id] = des.to_dict()
-    return json.dumps(des_of_event)
-
+def descriptions_by_event_id(event_id):
+    return list_descriptions_by_event_id(event_id)
+#Lists the description by description_id
+@app.route('/api/descriptions/d/<string:des_id>', methods=['GET'])
+@cross_origin()
+def description_by_description_id(des_id):
+    return list_description_by_description_id(des_id)
+#Adds a new description
 @app.route('/api/descriptions/<string:event_id>/add', methods=['POST'])
 @cross_origin()
 def a_description(event_id):
@@ -211,44 +295,35 @@ def a_description(event_id):
     end_time = request.args.get('end_time')
     return "description added" , add_description(des_name, passcode, status, start_time, end_time, event_id)
 
-
+#Lists all attendances in the database
 @app.route('/api/attendances', methods=['GET'])
 @cross_origin()
 def l_attedances():
     return list_attendances()
-
+#Lists attendances by user_id
 @app.route('/api/attendances/u/<string:user_id>', methods=['GET'])
 @cross_origin()
 def attedances_by_user(user_id):
-    docs = db.collection(u'attendance').where(u'user_id', u'==', user_id).stream()
-    atts = {}
-    for att in docs:
-        atts[att.id] = att.to_dict()
-    return json.dumps(atts)
-
+    return list_attendances_by_user(user_id)
+#Lists attendances by description_id
 @app.route('/api/attendances/d/<string:des_id>', methods=['GET'])
 @cross_origin()
 def attedances_by_description(des_id):
-    docs = db.collection(u'attendance').where(u'description_id', u'==', des_id).stream()
-    atts = {}
-    for att in docs:
-        atts[att.id] = att.to_dict()
-    return json.dumps(atts)
-
-@app.route('/api/attendances/<string:user_id>/<string:des_id>', methods=['GET'])
+    return list_attendances_by_description_id(des_id)
+#Lists attendances by user_id and description_id
+@app.route('/api/attendances/u/<string:user_id>/d/<string:des_id>', methods=['GET'])
 @cross_origin()
 def attedances_by_user_description(user_id, des_id):
-    docs = db.collection(u'attendance').where(u'user_id', u'==', user_id).where(u'description_id', u'==', des_id).stream()
-    atts = {}
-    for att in docs:
-        atts[att.id] = att.to_dict()
-    return json.dumps(atts)
-
-@app.route('/api/attendances/<string:user_id>/<string:des_id>/add', methods=['POST'])
+    return list_attedances_by_user_description(user_id, des_id)
+#Adds a new attendance
+@app.route('/api/attendances/u/<string:user_id>/d/<string:des_id>/add', methods=['POST'])
 @cross_origin()
 def a_attedances(user_id, des_id):
-    return "description added" , add_attendance(user_id, des_id)
-
+    actual_passcode = get_description_passcode(des_id)
+    passcode = request.args.get('passcode')
+    if (passcode == actual_passcode):
+        return "user's attendance added" , add_attendance(user_id, des_id)
+    return "passcodes do not match"
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT', 8080)))
