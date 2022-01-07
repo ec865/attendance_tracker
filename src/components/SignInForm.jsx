@@ -49,13 +49,26 @@ const SignInForm = () => {
         // }
         try {
 
-            const response = await axios.post(`http://127.0.0.1:8080/api/signin?email=${data.email} &password=${data.password}`)
+            const response = await axios.post(`http://127.0.0.1:8080/api/signin?email=${data.email}&password=${data.password}`)
             console.log(response)
-            history.push("/dashboard")
+            if (response.data === 404) {
+                setsignInError("Failed to Sign In")
+            }
+            else {
+                if (response.data.role === 1) {
+
+                    history.push("/dashboard")
+
+                }
+                else {
+                    history.push("/Contents")
+                }
+            }
 
 
 
-            // history.push("/Contents")
+
+
 
 
 
