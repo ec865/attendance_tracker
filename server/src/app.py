@@ -247,6 +247,15 @@ def list_attedances_by_user_description(user_id, des_id):
         })
     return json.dumps(atts)
 
+def list_attedances_by_user_event(user_id, event_id):
+    descriptions = db.collection(u'description').stream()
+    for des in descriptions:
+        if (des.get('event_id') == event_id):
+            print(des.id)
+            return list_attedances_by_user_description(user_id, des.id)
+    return "no attendance by the given user_id and event_id" , 404
+
+
 def list_attendance_by_attendance_id(att_id):
     docs = db.collection(u'attendance').document(att_id)
     if (attendance_exists(att_id)):
@@ -400,6 +409,15 @@ def attedance_by_attendance_id(att_id):
 @cross_origin()
 def attedances_by_user_description(user_id, des_id):
     return list_attedances_by_user_description(user_id, des_id)
+#Lists attendances by user_id and event_id
+@app.route('/api/attendances/u/<string:user_id>/e/<string:event_id>', methods=['GET'])
+@cross_origin()
+def attedances_by_user_event(user_id, event_id):
+    if(user_exists(user_id)):
+        if(event_exists(event_id)):
+            return list_attedances_by_user_event(user_id, event_id)
+        return "event does not exist, please check the event_id" , 404
+    return "user does not exist, please check the user_id" , 404
 #Adds a new attendance
 @app.route('/api/attendances/u/<string:user_id>/d/<string:des_id>/add', methods=['POST'])
 @cross_origin()
