@@ -3,15 +3,13 @@ import { Container } from 'react-bootstrap'
 import Table from 'react-bootstrap/Table'
 import ToggleButton from 'react-bootstrap/ToggleButton'
 import ButtonGroup from 'react-bootstrap/Button'
-
 import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
-import { con1Data } from '../Data/con1_dummyData'
 import axios from 'axios';
-import { getUserId, getAttendances } from '../utils';
+import { getUserId} from '../utils';
 
 
 
@@ -74,8 +72,6 @@ const Con1 = () => {
 
     )
 
-    
-
     const {
         register,
         handleSubmit,
@@ -106,7 +102,6 @@ const Con1 = () => {
     });
     const [passwordVisibility] = useState(false)
     const [radioValue, setRadioValue] = useState('1');
-    // const [radioValue1, setRadioValue1] = useState('1');
 
 
     const radios = [

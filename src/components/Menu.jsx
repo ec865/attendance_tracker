@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import { removeAccessToken, setAccessToken } from '../utils';
+import { removeAccessToken } from '../utils';
 
 const Menu = () => {
     const history = useHistory();

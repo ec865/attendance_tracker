@@ -6,10 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-
-
-
-
 const validationSchema = Yup.object().shape({
     name: Yup.string()
         .trim()
@@ -33,7 +29,7 @@ const SignUpForm = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting, isDirty },
+        formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',

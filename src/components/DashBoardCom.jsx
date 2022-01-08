@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { courseName } from '../Data/dasboard_dummyData';
+import React, {  useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
-import { Button, Container, Row, Form } from 'react-bootstrap';
+import { Button, Container,Form } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup'
-import { DasheventDummyData } from '../Data/dasboard_dummyData'
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import Col from 'react-bootstrap/Col'
 import axios from 'axios';
-import { removeAccessToken, getToken } from '../utils';
 
 
 
@@ -33,7 +29,6 @@ const DashBoardCom = () => {
     const [addEvent, setAddEvent] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
     const handlEventDelete = (event_id) => {
         axios.delete(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/events/delete?event_id=${event_id}`)
 
@@ -43,7 +38,7 @@ const DashBoardCom = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting, isDirty },
+        formState: { },
     } = useForm({
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',
@@ -166,11 +161,8 @@ const DashBoardCom = () => {
                 </Modal>
             </div>
 
-            {/* <div className='mt-5 d-flex justify-content-end pb-2'><Button className=' d-flex justify-content-around' onClick={() => generatePassword()} style={{ width: "30%", backgroundColor: "#703F3F" }} >Generate Passcode</Button>
-                <div style={{ width: "30%" }}>{passcode}</div>
+            
 
-            </div>
- */}
 
 
 

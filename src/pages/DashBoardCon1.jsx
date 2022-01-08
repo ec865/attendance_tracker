@@ -1,15 +1,11 @@
 import React, { useState } from 'react'
 import { Container } from 'react-bootstrap'
 import Table from 'react-bootstrap/Table'
-import ToggleButton from 'react-bootstrap/ToggleButton'
-import ButtonGroup from 'react-bootstrap/Button'
-
 import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
-import { dashBoardCon1Data } from '../Data/dashBoard_con1_dummyData'
 import axios from 'axios';
 
 const validationSchema = Yup.object().shape({
@@ -65,18 +61,18 @@ const DashBoardCon1 = () => {
         
     });
     const [passwordVisibility] = useState(false)
-    const [description_name] = useState(false)
+    // const [description_name] = useState(false)
 
 
-    const [radioValue, setRadioValue] = useState('1');
+    // const [radioValue, setRadioValue] = useState('1');
     // const [radioValue1, setRadioValue1] = useState('1');
 
 
-    const radios = [
-        { name: 'Present', value: 'Present' },
-        { name: 'Absent', value: 'Absent' },
+    // const radios = [
+    //     { name: 'Present', value: 'Present' },
+    //     { name: 'Absent', value: 'Absent' },
 
-    ];
+    // ];
     return (
         <Container>
             <div className='con mt-5'  ><p className=" text-center" >Attendance Tracker</p></div>

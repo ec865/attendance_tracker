@@ -8,12 +8,6 @@ import axios from 'axios';
 import {  setAccessToken ,setAccessRole, setuserId} from '../utils';
 
 
-// interface IData {
-//     email: string;
-//     password: string;
-
-
-// }
 const validationSchema = Yup.object().shape({
     email: Yup.string().trim().lowercase().required('Required'),
     password: Yup.string()
@@ -42,12 +36,6 @@ const SignInForm = () => {
     const onSubmit = handleSubmit(async (data) => {
         console.log(data);
 
-        // if (data.email === "admin@city.edu") {
-        //     history.push("/dashboard")
-        // }
-        // else {
-        //     history.push("/Contents")
-        // }
         try {
 
             const response = await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/signin?email=${data.email}&password=${data.password}`)
@@ -79,20 +67,7 @@ const SignInForm = () => {
             }
 
             
-            // else if (response.data.role === 0) {
-            //     console.log(response.data.role)
-            //     history.push("/Contents")
-                    
-            // }
-            // else if (response.data.role === 1) {
-            //     console.log(response.data.role)
-            //      history.push("/dashboard")
-                
-            // }
-            //     setAccessToken(response.data);
-            //     setAccessRole(response.data.role);
-            //     setuserId(response.data.user_id);
-
+        
 
         }
         catch {
