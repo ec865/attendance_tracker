@@ -7,7 +7,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useHistory } from 'react-router-dom';
+import { useHistory ,useParams} from 'react-router-dom';
 import axios from 'axios';
 import { getUserId} from '../utils';
 
@@ -31,6 +31,8 @@ const Con1 = () => {
 
     const [descriptionsData, setdescriptionsData] = useState()
     const userId = getUserId()
+    const id = useParams()
+    console.log(id)
    
    
     useEffect(() => {
@@ -38,9 +40,11 @@ const Con1 = () => {
         console.log(38)
 
         async function fetchdata() {
-               await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances`).then((res) => setdescriptionsData(res.data))
+            await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances`).then((res) => setattendancesData(res.data))
+            
             
         }
+        console.log(descriptionsData)
         fetchdata()
    
         console.log(42)
@@ -89,7 +93,7 @@ const Con1 = () => {
         history.push("/LastPage")
 
          try {
-            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions/event2/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
+            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions/${id.event_id}/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
             history.push("/LastPage")
         }
         catch {
@@ -113,7 +117,7 @@ const Con1 = () => {
                 <Table striped bordered hover  className=" text-center">
                     <thead className=" text-center">
                         <tr>
-                            <th>Date</th>
+                            {/* <th>Date</th> */}
                             <th>Description</th>
                             <th>Status</th>
                             <th>Passcode</th>
@@ -122,7 +126,7 @@ const Con1 = () => {
 
                     <tbody>
                         <tr>
-                            <td>01/12/2022</td>
+                            {/* <td>{}</td> */}
                             <td>{ attendancesData.length>0&&attendancesData[0].description_id }</td>
                             <td>
 

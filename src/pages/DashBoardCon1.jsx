@@ -5,8 +5,9 @@ import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { getUserId } from '../utils';
 
 const validationSchema = Yup.object().shape({
 
@@ -32,6 +33,7 @@ const DashBoardCon1 = () => {
 
 
     const history = useHistory()
+    const  id  = useParams()
 
     const {
         register,
@@ -51,7 +53,7 @@ const DashBoardCon1 = () => {
     const onSubmit = handleSubmit(async (data) => {
 
         try {
-             await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions/event2/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
+             await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions/${id.DashBoard_event_id}/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
              history.push("/LastPage")
         }
         catch {
@@ -61,6 +63,8 @@ const DashBoardCon1 = () => {
         
     });
     const [passwordVisibility] = useState(false)
+    
+    console.log(id)
     
     return (
         <Container>

@@ -6,6 +6,8 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { getUserId } from '../utils';
 
 
 
@@ -20,14 +22,34 @@ const validationSchema = Yup.object().shape({
 
 
 const DashBoardCom = () => {
+
+
+
+
     // const [passcode, setpasscode] = useState("")
     const [selectedCourse, setselectedCourse] = useState()
-    const [renderCount,setrenderCount]= useState(0)
+    const [renderCount, setrenderCount] = useState(0)
+    const id = useParams();
+    console.log(id)
     console.log(selectedCourse)
 
 
     const [show, setShow] = useState(false);
     const [addEvent, setAddEvent] = useState(false);
+    // const generatePassword = () => {
+    //     var result = '';
+    //     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    //     var charactersLength = characters.length;
+    //     for (var i = 0; i < 12; i++) {
+    //         result += characters.charAt(Math.floor(Math.random() *
+    //             charactersLength));
+    //     }
+    //     return result
+    // }
+
+
+
+
 
     const handleClose = () => setShow(false);
     const handlEventDelete = async (event_id) => {
@@ -55,7 +77,7 @@ const DashBoardCom = () => {
         console.log(data);
         setAddEvent(false);
         try {
-             await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/events/1/add?event_name=${data.event_name}`)
+             await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/events/${getUserId()}/add?event_name=${data.event_name}`)
             setrenderCount(renderCount + 1)
             console.log(renderCount)
 
@@ -152,7 +174,7 @@ const DashBoardCom = () => {
                         <Modal.Header closeButton>
 
 
-                            <Modal.Title>Modal heading</Modal.Title>
+                            <Modal.Title>Add Event</Modal.Title>
                         </Modal.Header>
                         {/* <Modal.Body>Are you sure, are going to add a  new Course ?</Modal.Body> */}
                         <Form.Group className='mt-1' style={{ width: "69.5%", marginLeft: "10%", marginTop: "10%" }}>
