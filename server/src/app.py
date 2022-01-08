@@ -15,7 +15,7 @@ firebase_admin.initialize_app(cred, {'projectId': "attendancetracker-239b2",})
 db = firestore.client()
 
 def add_user(name, surname, email, password, role):
-    user = db.collection(u'users').document(name + '_' + surname)
+    user = db.collection(u'users').document((name + '_' + surname).replace(' ', '-'))
     user.set({
         u'name': name,
         u'surname': surname,
@@ -68,7 +68,7 @@ def user_email_exists(email):
     return False
 
 def add_event(name, user_id):
-    event = db.collection(u'events').document(name + '_' + user_id)
+    event = db.collection(u'events').document((name + '_' + user_id).replace(' ', '-'))
     event.set({
         u'event_name': name,
         u'user_id': user_id,
@@ -109,6 +109,12 @@ def list_events_by_event_id(event_id):
     return json.dumps(event_list)
 
 def delete_event(event_id):
+    descriptions = json.loads(list_descriptions_by_event_id(event_id))
+    for description in descriptions:
+        attendances = json.loads(list_attendances_by_description_id(description['description_id']))
+        for attendance in attendances:
+            db.collection(u'attendance').document(attendance['attendance_id']).delete()
+        db.collection(u'description').document(description['description_id']).delete()
     db.collection(u'events').document(event_id).delete()
 
 def event_exists(event_id):
@@ -119,7 +125,7 @@ def event_exists(event_id):
     return False
 
 def add_description(des_name, passcode, start_time, end_time, event_id):
-    des = db.collection(u'description').document(event_id + '_' + des_name)
+    des = db.collection(u'description').document((event_id + '_' + des_name).replace(' ', '-'))
     des.set({
         u'description_name': des_name,
         u'passcode': passcode,
@@ -265,13 +271,7 @@ CORS(app)
 @app.route('/', methods=['GET'])
 @cross_origin()
 def index():
-    context = { 
-        'users' : json.loads(list_users()),
-        'events' : json.loads(list_events()),
-        'descriptions' : json.loads(list_descriptions()),
-        'attendances' : json.loads(list_attendances())
-    }
-    return json.dumps(context)
+    return "Hey! Please use the APIs to do more!"
 
 #Sign in
 @app.route('/api/signin', methods=['POST'])
@@ -390,7 +390,7 @@ def attedances_by_user(user_id):
 @cross_origin()
 def attedances_by_description(des_id):
     return list_attendances_by_description_id(des_id)
-#Lists attendances by attendance_id
+#Lists the attendance(description) by attendance_id
 @app.route('/api/attendances/a/<string:att_id>', methods=['GET'])
 @cross_origin()
 def attedance_by_attendance_id(att_id):
