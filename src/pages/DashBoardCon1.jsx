@@ -61,18 +61,7 @@ const DashBoardCon1 = () => {
         
     });
     const [passwordVisibility] = useState(false)
-    // const [description_name] = useState(false)
-
-
-    // const [radioValue, setRadioValue] = useState('1');
-    // const [radioValue1, setRadioValue1] = useState('1');
-
-
-    // const radios = [
-    //     { name: 'Present', value: 'Present' },
-    //     { name: 'Absent', value: 'Absent' },
-
-    // ];
+    
     return (
         <Container>
             <div className='con mt-5'  ><p className=" text-center" >Attendance Tracker</p></div>

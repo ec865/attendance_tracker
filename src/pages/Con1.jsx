@@ -29,9 +29,6 @@ const Con1 = () => {
     const [attendancesData, setattendancesData] = useState("")
     const history = useHistory()
 
-    
-
-
     const [descriptionsData, setdescriptionsData] = useState()
     const userId = getUserId()
    

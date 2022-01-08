@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, {  useState,useEffect} from 'react'
 import Modal from 'react-bootstrap/Modal'
 import { Button, Container,Form } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -22,6 +22,7 @@ const validationSchema = Yup.object().shape({
 const DashBoardCom = () => {
     // const [passcode, setpasscode] = useState("")
     const [selectedCourse, setselectedCourse] = useState()
+    const [renderCount,setrenderCount]= useState(0)
     console.log(selectedCourse)
 
 
@@ -29,16 +30,18 @@ const DashBoardCom = () => {
     const [addEvent, setAddEvent] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handlEventDelete = (event_id) => {
-        axios.delete(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/events/delete?event_id=${event_id}`)
+    const handlEventDelete = async (event_id) => {
 
+        await axios.delete(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/events/delete?event_id=${event_id}`);
+        setrenderCount(renderCount + 1)
+        console.log(renderCount)
         handleClose()
     }
 
     const {
         register,
         handleSubmit,
-        formState: { },
+        formState: {},
     } = useForm({
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',
@@ -53,7 +56,8 @@ const DashBoardCom = () => {
         setAddEvent(false);
         try {
              await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/events/1/add?event_name=${data.event_name}`)
-           
+            setrenderCount(renderCount + 1)
+            console.log(renderCount)
 
         }
         catch {
@@ -67,9 +71,16 @@ const DashBoardCom = () => {
     });
 
     const [eventData, seteventData] = useState()
+
+    useEffect(() => {
+
+      axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app//api/events`).then((res) => { seteventData(res.data);console.log(res.data)} )
+
+
+    }, [renderCount])
  
 
-        axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app//api/events`).then((res) => { seteventData(res.data);console.log(res.data)} )
+        // axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app//api/events`).then((res) => { seteventData(res.data);console.log(res.data)} )
     
 
 
