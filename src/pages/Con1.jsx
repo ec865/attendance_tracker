@@ -36,6 +36,8 @@ const Con1 = () => {
 
     const [descriptionsData, setdescriptionsData] = useState()
     const userId = getUserId()
+   
+   
     useEffect(() => {
 
         console.log(38)
@@ -87,21 +89,20 @@ const Con1 = () => {
 
         }
     });
+    
+    
     const onSubmit = handleSubmit(async (data) => {
         console.log(data);
         history.push("/LastPage")
 
-        //  try {
-        //     await axios.post(`http://127.0.0.1:8080/api/attendances/u/1/d/1/add?passcode=${data.passcode}&status=${data.status}`)
-        //     history.push("/LastPage")
-        // }
-        // catch {
+         try {
+            await axios.post(`http://127.0.0.1:8080/api/descriptions/event2/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
+            history.push("/LastPage")
+        }
+        catch {
 
-        //     setsignUpError("Failed to Sign Up")
-
-
-
-        // }
+           
+        }
     });
     const [passwordVisibility] = useState(false)
     const [radioValue, setRadioValue] = useState('1');
@@ -115,10 +116,10 @@ const Con1 = () => {
     ];
     return (
         <Container>
-            <div className='con mt-5'  ><p className=" text-center" >Attendance Tracker</p></div>
-            <Form onSubmit={onSubmit} style={{}} >
-                <Table striped bordered hover>
-                    <thead>
+            <div className='con mt-5 text-center"'  ><p className=" text-center" >Attendance Tracker</p></div>
+            <Form onSubmit={onSubmit} style={{}} className=" text-center">
+                <Table striped bordered hover  className=" text-center">
+                    <thead className=" text-center">
                         <tr>
                             <th>Date</th>
                             <th>Description</th>
@@ -177,26 +178,25 @@ const Con1 = () => {
             <br />
             <br />
 
-            <Table striped bordered hover>
+            <Table striped bordered hover className=" text-center">
                 <thead>
                     <tr>
-                        <th>Date</th>
+                        {/* <th>Date</th> */}
                         <th>Description</th>
                         <th>Status</th>
-                        <th>Remarks</th>
+                        {/* <th>Remarks</th> */}
                     </tr>
                 </thead>
-                <tbody>{attendancesData?attendancesData.map((v, i) => (
+                <tbody>{attendancesData && attendancesData.map((v, i) => (
                     <tr key={i}>
-                        <td>{v.date}</td>
+                        {/* <td>{v.date}</td> */}
                         <td>{v.description_id}</td>
                         <td>{v.status === "present" ? <p className="text-success">Present</p> : <p className="text-danger">Absent</p>}
                         </td>
-                        <td>{v.remarks}</td>
+                        {/* <td>{v.remarks}</td> */}
                     </tr>
 
-                )):<p>failed</p>}
-
+                ))}
 
                 </tbody>
                 

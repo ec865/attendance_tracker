@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { removeAccessToken, setAccessToken ,setAccessRole, setuserId} from '../utils';
+import {  setAccessToken ,setAccessRole, setuserId} from '../utils';
 
 
 // interface IData {
@@ -52,15 +52,21 @@ const SignInForm = () => {
 
             const response = await axios.post(`http://127.0.0.1:8080/api/signin?email=${data.email}&password=${data.password}`)
             console.log(response)
+            console.log(response.data.role)
+           
             if (response.data === 404) {
+                console.log(response.data.role)
                 setsignInError("Failed to Sign In")
             }
             else {
-                if (response.data.role === 1) {
+                if (response.data.role === "1") {
+                    console.log(response)
+                    console.log(response.data.role)
 
                     history.push("/dashboard")
 
                 }
+            
                 else {
                     history.push("/Contents")
 
@@ -72,11 +78,20 @@ const SignInForm = () => {
 
             }
 
-
-
-
-
-
+            
+            // else if (response.data.role === 0) {
+            //     console.log(response.data.role)
+            //     history.push("/Contents")
+                    
+            // }
+            // else if (response.data.role === 1) {
+            //     console.log(response.data.role)
+            //      history.push("/dashboard")
+                
+            // }
+            //     setAccessToken(response.data);
+            //     setAccessRole(response.data.role);
+            //     setuserId(response.data.user_id);
 
 
         }
