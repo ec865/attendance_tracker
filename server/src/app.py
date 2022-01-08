@@ -241,6 +241,14 @@ def list_attedances_by_user_description(user_id, des_id):
         })
     return json.dumps(atts)
 
+def list_attendance_by_attendance_id(att_id):
+    docs = db.collection(u'attendance').document(att_id)
+    if (attendance_exists(att_id)):
+        att = docs.get()
+        des_id = att.get('description_id')
+        return list_description_by_description_id(des_id)
+    return "attendance not found" , 404
+
 def attendance_exists(att_id):
     docs = db.collection(u'attendance').document(att_id)
     att = docs.get()
@@ -382,6 +390,11 @@ def attedances_by_user(user_id):
 @cross_origin()
 def attedances_by_description(des_id):
     return list_attendances_by_description_id(des_id)
+#Lists attendances by attendance_id
+@app.route('/api/attendances/a/<string:att_id>', methods=['GET'])
+@cross_origin()
+def attedance_by_attendance_id(att_id):
+    return list_attendance_by_attendance_id(att_id)
 #Lists attendances by user_id and description_id
 @app.route('/api/attendances/u/<string:user_id>/d/<string:des_id>', methods=['GET'])
 @cross_origin()
