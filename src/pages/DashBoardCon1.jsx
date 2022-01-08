@@ -53,8 +53,11 @@ const DashBoardCon1 = () => {
     const onSubmit = handleSubmit(async (data) => {
 
         try {
+            
              await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions/${id.DashBoard_event_id}/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
-             history.push("/LastPage")
+             history.push("/sucess")
+
+
         }
         catch {
             

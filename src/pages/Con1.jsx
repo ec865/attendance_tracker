@@ -17,7 +17,10 @@ const validationSchema = Yup.object().shape({
 
     passcode: Yup.string()
         .trim()
-        .required('Required')
+        .required('Required'),
+        status: Yup.string()
+        .trim()
+        .required('Required'),
 });
 
 
@@ -97,7 +100,7 @@ const Con1 = () => {
         history.push("/LastPage")
 
          try {
-            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions/${id.event_id}/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
+            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances/u/${id.user_id}/d/${id.descriptions_id}/add?passcode=${data.passcode}&status=${data.status}`)
             history.push("/LastPage")
         }
         catch {
@@ -189,7 +192,7 @@ const Con1 = () => {
                 </thead>
                 <tbody>{attendancesData && attendancesData.map((v, i) => (
                     <tr key={i}>
-                        <td>{v.start_time}</td>
+                        <td>{v.start_time} - {v.end_time}</td>
                         <td>{v.description_name}</td>
                         <td>{v.status === "present" ? <p className="text-success">Present</p> : <p className="text-danger">Absent</p>}
                         </td>

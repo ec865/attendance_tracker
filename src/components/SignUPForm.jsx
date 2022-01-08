@@ -67,7 +67,7 @@ const SignUpForm = () => {
             <Form onSubmit={onSubmit} >
                 <Form.Group className='mt-1' style={{ width: "69.5%", marginLeft: "10%", marginTop: "10%" }}>
                     {/* <Form.Label>First Name</Form.Label> */}
-                    <Form.Control type="name" placeholder="Frist Name" {...register("name")} />
+                    <Form.Control type="name" placeholder="First Name" {...register("name")} />
                     {errors.name && (
                         <p className="text-red-500 text-sm font-semibold mt-1">{errors.name.message}</p>
                     )}

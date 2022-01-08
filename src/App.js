@@ -9,6 +9,7 @@ import Contents from './pages/Contents';
 import Menu from './components/Menu';
 import Con1 from './pages/Con1';
 import LastPage from './pages/LastPage';
+import sucess from './pages/sucess';
 import Dashboard from './pages/Dashboard';
 import DashBoardCon1 from './pages/DashBoardCon1';
 import { getRole } from './utils/index.js';
@@ -63,6 +64,7 @@ function App() {
                   
                   <Route exact path="/dashboard" component={Dashboard} />
                   <Route exact path="/dashBoard/:DashBoard_event_id" component={DashBoardCon1} />
+                  <Route exact path="/sucess" component={sucess} />
                 
                 {/* </div>} */}
                 
