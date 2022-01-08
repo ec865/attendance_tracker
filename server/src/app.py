@@ -279,7 +279,8 @@ def sign_in():
                 return {
                     'name' : user.get('name'),
                     'surname' : user.get('surname'),
-                    'role' : user.get('role')
+                    'role' : user.get('role'),
+                    'user_id' : user.get('user_id')
                 }
     return "email or password is wrong", 404
 #Sign up
