@@ -21,7 +21,7 @@ const Menu = () => {
                             <Nav.Link href="/SignUp">SIGN UP</Nav.Link>
                             <Nav.Link href="/SignIn">SIGN IN</Nav.Link>
 
-                            <Button onClick={handleSignOut}>Sign Out</Button>
+                            <Button onClick={handleSignOut} variant="secondary">Sign Out</Button>
                             {/* <Nav.Link href="/">SIGN OUT</Nav.Link> */}
 
 

@@ -26,9 +26,6 @@ const Contents = () => {
             <ListGroup className='center mt-5 pd-5'>
                 {eventData ? eventData.map((v, i) => (<ListGroup.Item key={i} action href={`Contents/${v.event_id}`} variant="secondary" >{v.event_name}</ListGroup.Item>)) : <p>no data found</p>}
 
-
-
-
             </ListGroup>
 
 

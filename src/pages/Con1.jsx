@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import Table from 'react-bootstrap/Table'
 import ToggleButton from 'react-bootstrap/ToggleButton'
@@ -10,10 +10,14 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import { con1Data } from '../Data/con1_dummyData'
+import axios from 'axios';
+
+import { removeAccessAttendances, getAttendances } from '../utils';
+
 
 const validationSchema = Yup.object().shape({
 
-    password: Yup.string()
+    passcode: Yup.string()
         .trim()
         .required('Required')
 });
@@ -21,10 +25,20 @@ const validationSchema = Yup.object().shape({
 
 
 const Con1 = () => {
+    const user = getAttendances()
+     console.log(user)
 
-
-
+    const [attendancesData, setattendancesData] = useState("")
     const history = useHistory()
+
+
+    const [descriptionsData, setdescriptionsData] = useState()
+    useEffect(() => {
+
+        axios.get(`http://127.0.0.1:8080/api/attendances`).then((res) => setattendancesData(res.data))
+
+
+    }, [])
 
     const {
         register,
@@ -34,16 +48,28 @@ const Con1 = () => {
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',
         defaultValues: {
-            password: '',
+            passcode: '',
+            status:'',
 
         }
     });
     const onSubmit = handleSubmit(async (data) => {
         console.log(data);
         history.push("/LastPage")
+
+        //  try {
+        //     await axios.post(`http://127.0.0.1:8080/api/attendances/u/1/d/1/add?passcode=${data.passcode}&status=${data.status}`)
+        //     history.push("/LastPage")
+        // }
+        // catch {
+
+        //     setsignUpError("Failed to Sign Up")
+
+
+
+        // }
     });
     const [passwordVisibility] = useState(false)
-
     const [radioValue, setRadioValue] = useState('1');
     // const [radioValue1, setRadioValue1] = useState('1');
 
@@ -70,7 +96,7 @@ const Con1 = () => {
                     <tbody>
                         <tr>
                             <td>01/12/2022</td>
-                            <td>Week-1</td>
+                            <td>{ attendancesData&&attendancesData[0].description_id }</td>
                             <td>
 
                                 <ButtonGroup className="mb-2  " variant='outline-primary'>
@@ -96,7 +122,7 @@ const Con1 = () => {
 
                                 <Form.Group >
 
-                                    <Form.Control type={passwordVisibility ? "text" : "password"} placeholder="Enter your passcode" {...register("password")} />
+                                    <Form.Control type={passwordVisibility ? "text" : "password"} placeholder="Enter your passcode" {...register("passcode")} />
                                     {errors.password && (
                                         <p className="text-red-500 text-sm font-semibold mt-1">{errors.password.message}</p>
                                     )}
@@ -123,27 +149,23 @@ const Con1 = () => {
                         <th>Date</th>
                         <th>Description</th>
                         <th>Status</th>
-                        <th>Points</th>
                         <th>Remarks</th>
                     </tr>
                 </thead>
-                <tbody>{con1Data.map((v, i) => (
+                <tbody>{attendancesData?attendancesData.map((v, i) => (
                     <tr key={i}>
                         <td>{v.date}</td>
-                        <td>{v.description}</td>
-                        <td>{v.status === "Present" ? <p className="text-success">Present</p> : <p className="text-danger">Absent</p>}
-
-
+                        <td>{v.description_id}</td>
+                        <td>{v.status === "present" ? <p className="text-success">Present</p> : <p className="text-danger">Absent</p>}
                         </td>
-
-                        <td>{v.point}</td>
                         <td>{v.remarks}</td>
                     </tr>
 
-                ))}
+                )):<p>failed</p>}
 
 
                 </tbody>
+                
             </Table>
 
 

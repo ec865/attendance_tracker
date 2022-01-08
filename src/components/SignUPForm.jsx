@@ -9,12 +9,6 @@ import axios from 'axios';
 
 
 
-// const validationSchema = Yup.object().shape({
-//     email: Yup.string().trim().lowercase().required('Required'),
-//     password: Yup.string()
-//         .trim()
-//         .required('Required')
-// });
 
 const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -124,7 +118,7 @@ const SignUpForm = () => {
                 <br />
                 <Button type="submit" className='mt-1' style={{ width: "20%", marginLeft: "10%", marginTop: "10%", backgroundColor: "#703F3F" }}>Submit</Button>
             </Form>
-            <p>{signUpError}</p>
+            <p style={{ marginLeft: "10%",marginTop: "5" }}>{signUpError}</p>
 
 
         </div>

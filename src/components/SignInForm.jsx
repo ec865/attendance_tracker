@@ -114,7 +114,7 @@ const SignInForm = () => {
                 <Button type="submit" style={{ width: "20%", backgroundColor: "#703F3F" }}>Submit</Button>
             </Form>
 
-            <p>{signInError}</p>
+            <p style={{ marginLeft: "10%",marginTop: "5" }}>{signInError}</p>
         </div>
     )
 }

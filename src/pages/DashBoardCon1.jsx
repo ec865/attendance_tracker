@@ -65,11 +65,10 @@ const DashBoardCon1 = () => {
                         <tr>
 
                             <th>Description</th>
-
                             <th>Passcode</th>
                             <th>Start Time</th>
                             <th>End Time</th>
-                            <th>Date</th>
+                            
                         </tr>
                     </thead>
 
@@ -111,7 +110,7 @@ const DashBoardCon1 = () => {
 
                                 <Form.Group >
 
-                                    <Form.Control type="time" placeholder="Enter Start Time" {...register("start_time")} />
+                                    <Form.Control type="datetime-local" placeholder="Enter Start Time" {...register("start_time")} />
 
 
                                 </Form.Group>
@@ -123,24 +122,14 @@ const DashBoardCon1 = () => {
 
                                 <Form.Group >
 
-                                    <Form.Control type="time" placeholder="Enter End Time" {...register("end_time")} />
+                                    <Form.Control type="datetime-local" placeholder="Enter End Time" {...register("end_time")} />
 
 
                                 </Form.Group>
 
                             </td>
 
-                            <td>
-
-
-                                <Form.Group >
-
-                                    <Form.Control type="date" placeholder="Enter End Time" {...register("date")} />
-
-
-                                </Form.Group>
-
-                            </td>
+                           
                         </tr>
 
                     </tbody>

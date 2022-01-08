@@ -15,7 +15,7 @@ import { removeAccessToken, getToken } from '../utils';
 
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string()
+    event_name: Yup.string()
         .trim()
         .required('Required'),
 
@@ -25,7 +25,8 @@ const validationSchema = Yup.object().shape({
 
 const DashBoardCom = () => {
     // const [passcode, setpasscode] = useState("")
-    const [selectedCourse, setselectedCourse] = useState("")
+    const [selectedCourse, setselectedCourse] = useState()
+    console.log(selectedCourse)
 
 
     const [show, setShow] = useState(false);
@@ -33,6 +34,11 @@ const DashBoardCom = () => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handlEventDelete = (event_id) => {
+        axios.delete(`http://127.0.0.1:8080/api/events/delete?event_id=${event_id}`)
+
+        handleClose()
+    }
 
     const {
         register,
@@ -42,7 +48,7 @@ const DashBoardCom = () => {
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',
         defaultValues: {
-            name: '',
+            event_name: '',
 
         }
     });
@@ -51,7 +57,8 @@ const DashBoardCom = () => {
         console.log(data);
         setAddEvent(false);
         try {
-
+             await axios.post(`http://127.0.0.1:8080/api/events/1/add?event_name=${data.event_name}`)
+           
 
         }
         catch {
@@ -65,12 +72,13 @@ const DashBoardCom = () => {
     });
 
     const [eventData, seteventData] = useState()
-    useEffect(() => {
+ 
 
-        axios.get(`http://127.0.0.1:8080/api/events`).then((res) => seteventData(res.data))
+        axios.get(`http://127.0.0.1:8080/api/events`).then((res) => { seteventData(res.data);console.log(res.data)} )
+    
 
 
-    }, [])
+
 
 
    
@@ -103,13 +111,6 @@ const DashBoardCom = () => {
 
 
 
-               
-
-
-           
-
-
-
             
 
 
@@ -125,7 +126,12 @@ const DashBoardCom = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Modal heading</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you Sure,you want to delete {selectedCourse.name}</Modal.Body>
+                <Modal.Body>Are you Sure,you want to delete {selectedCourse&&selectedCourse.event_name}</Modal.Body>
+
+                <div><Button onClick={()=>handlEventDelete(selectedCourse.event_id)} style={{ width: "20%", backgroundColor: "#703F3F" }}>
+                Confirm
+                </Button>
+                </div>
 
             </Modal>
 
@@ -144,7 +150,7 @@ const DashBoardCom = () => {
                         </Modal.Header>
                         {/* <Modal.Body>Are you sure, are going to add a  new Course ?</Modal.Body> */}
                         <Form.Group className='mt-1' style={{ width: "69.5%", marginLeft: "10%", marginTop: "10%" }}>
-                            <Form.Control type="text" placeholder="Add Event" {...register("name")} />
+                            <Form.Control type="text" placeholder="Add Event" {...register("event_name")} />
                             <Modal.Footer>
                                 <Button onClick={() => setAddEvent(false)} style={{ width: "20%", backgroundColor: "#703F3F" }}>
                                     Close

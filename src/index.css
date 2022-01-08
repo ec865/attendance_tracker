@@ -9,18 +9,23 @@ background-repeat: no-repeat;
 background-size: cover;
 } */
 
-.con{
-    font-family: Poiret One;
-    color: #703F3F;
-    font-size: 30px;
+.con {
+  font-family: Poiret One;
+  color: #703f3f;
+  font-size: 30px;
 }
-.mb-4{
-      background-image: linear-gradient(to right, rgba(246, 246, 246, 0), rgb(105, 67, 67));
-}.lp{
-    font-family: Poiret One;
-    color: #703F3F;
-    font-size: 70px;
+.mb {
+  background-image: linear-gradient(
+    to right,
+    rgba(246, 246, 246, 0),
+    rgb(105, 67, 67)
+  );
 }
-.dash1{
-    margin-left: 2;
+.lp {
+  font-family: Poiret One;
+  color: #703f3f;
+  font-size: 70px;
+}
+.dash1 {
+  margin-left: 2;
 }
