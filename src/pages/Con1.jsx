@@ -41,6 +41,7 @@ const Con1 = () => {
 
         async function fetchdata() {
             await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances`).then((res) => setattendancesData(res.data))
+            await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions`).then((res) => setdescriptionsData(res.data))
             
             
         }
@@ -55,6 +56,10 @@ const Con1 = () => {
 
 
     }, [])
+
+
+
+    
    
     useEffect(() => {
           console.log(descriptionsData)
@@ -67,12 +72,11 @@ const Con1 = () => {
             
             console.log(47)
         }
+    },[descriptionsData] )
 
-
-    },[descriptionsData]
-
-    )
-
+    
+    
+    
     const {
         register,
         handleSubmit,
@@ -117,7 +121,7 @@ const Con1 = () => {
                 <Table striped bordered hover  className=" text-center">
                     <thead className=" text-center">
                         <tr>
-                            {/* <th>Date</th> */}
+                            <th>Date</th>
                             <th>Description</th>
                             <th>Status</th>
                             <th>Passcode</th>
@@ -126,8 +130,8 @@ const Con1 = () => {
 
                     <tbody>
                         <tr>
-                            {/* <td>{}</td> */}
-                            <td>{ attendancesData.length>0&&attendancesData[0].description_id }</td>
+                            <td>{descriptionsData&&descriptionsData[0].start_time}</td>
+                            <td>{ attendancesData.length>0&&attendancesData[0].description_name }</td>
                             <td>
 
                                 <ButtonGroup className="mb-2  " variant='outline-primary'>
@@ -177,7 +181,7 @@ const Con1 = () => {
             <Table striped bordered hover className=" text-center">
                 <thead>
                     <tr>
-                        {/* <th>Date</th> */}
+                        <th>Date</th>
                         <th>Description</th>
                         <th>Status</th>
                         {/* <th>Remarks</th> */}
@@ -185,8 +189,8 @@ const Con1 = () => {
                 </thead>
                 <tbody>{attendancesData && attendancesData.map((v, i) => (
                     <tr key={i}>
-                        {/* <td>{v.date}</td> */}
-                        <td>{v.description_id}</td>
+                        <td>{v.start_time}</td>
+                        <td>{v.description_name}</td>
                         <td>{v.status === "present" ? <p className="text-success">Present</p> : <p className="text-danger">Absent</p>}
                         </td>
                         {/* <td>{v.remarks}</td> */}
