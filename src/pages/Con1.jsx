@@ -14,6 +14,7 @@ import axios from 'axios';
 import { getUserId, getAttendances } from '../utils';
 
 
+
 const validationSchema = Yup.object().shape({
 
     passcode: Yup.string()
@@ -30,6 +31,8 @@ const Con1 = () => {
     const [attendancesData, setattendancesData] = useState("")
     const history = useHistory()
 
+    
+
 
     const [descriptionsData, setdescriptionsData] = useState()
     const userId = getUserId()
@@ -37,23 +40,37 @@ const Con1 = () => {
 
         console.log(38)
 
-
-        axios.get(`http://127.0.0.1:8080/api/attendances`).then((res) => setattendancesData(res.data))
+        async function fetchdata() {
+               await axios.get(`http://127.0.0.1:8080/api/attendances`).then((res) => setdescriptionsData(res.data))
+            
+        }
+        fetchdata()
+   
         console.log(42)
 
-        if (attendancesData) {
-           let events = attendancesData.filter((e) => e.user_id = userId)
+
+     
+          
+
+
+    }, [])
+   
+    useEffect(() => {
+          console.log(descriptionsData)
+        
+        if (descriptionsData) {
+        
+           let events = descriptionsData.filter((e) => e.user_id = userId)
             setattendancesData(events)
+           
+            
             console.log(47)
         }
 
-      console.log(attendancesData)
-     
 
-      
+    },[descriptionsData]
 
-
-    }, [attendancesData,userId])
+    )
 
     
 
