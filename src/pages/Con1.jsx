@@ -11,8 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import { con1Data } from '../Data/con1_dummyData'
 import axios from 'axios';
-
-import { removeAccessAttendances, getAttendances } from '../utils';
+import { getUserId, getAttendances } from '../utils';
 
 
 const validationSchema = Yup.object().shape({
@@ -25,20 +24,38 @@ const validationSchema = Yup.object().shape({
 
 
 const Con1 = () => {
-    const user = getAttendances()
-     console.log(user)
+    // const user = getAttendances()
+    //  console.log(user)
 
     const [attendancesData, setattendancesData] = useState("")
     const history = useHistory()
 
 
     const [descriptionsData, setdescriptionsData] = useState()
+    const userId = getUserId()
     useEffect(() => {
 
+        console.log(38)
+
+
         axios.get(`http://127.0.0.1:8080/api/attendances`).then((res) => setattendancesData(res.data))
+        console.log(42)
+
+        if (attendancesData) {
+           let events = attendancesData.filter((e) => e.user_id = userId)
+            setattendancesData(events)
+            console.log(47)
+        }
+
+      console.log(attendancesData)
+     
+
+      
 
 
-    }, [])
+    }, [attendancesData,userId])
+
+    
 
     const {
         register,
@@ -96,7 +113,7 @@ const Con1 = () => {
                     <tbody>
                         <tr>
                             <td>01/12/2022</td>
-                            <td>{ attendancesData&&attendancesData[0].description_id }</td>
+                            <td>{ attendancesData.length>0&&attendancesData[0].description_id }</td>
                             <td>
 
                                 <ButtonGroup className="mb-2  " variant='outline-primary'>

@@ -10,12 +10,23 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import { dashBoardCon1Data } from '../Data/dashBoard_con1_dummyData'
+import axios from 'axios';
 
 const validationSchema = Yup.object().shape({
 
-    password: Yup.string()
+    passcode: Yup.string()
         .trim()
-        .required('Required')
+        .required('Required'),
+     start_time: Yup.string()
+        .trim()
+        .required('Required'),
+     end_time: Yup.string()
+        .trim()
+        .required('Required'),
+     des_name: Yup.string()
+        .trim()
+        .required('Required'),
+     
 });
 
 
@@ -34,14 +45,24 @@ const DashBoardCon1 = () => {
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',
         defaultValues: {
-            password: '',
-            description_name: ''
+            passcode: '',
+            start_time: '',
+            end_time: '',
+            des_name:'',
 
         }
     });
     const onSubmit = handleSubmit(async (data) => {
+
+        try {
+             await axios.post(`http://127.0.0.1:8080/api/descriptions/event2/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
+             history.push("/LastPage")
+        }
+        catch {
+            
+        }
         console.log(data);
-        history.push("/LastPage")
+        
     });
     const [passwordVisibility] = useState(false)
     const [description_name] = useState(false)
@@ -78,7 +99,7 @@ const DashBoardCon1 = () => {
                             <td>
                                 <Form.Group >
 
-                                    <Form.Control type="description" placeholder="Enter your Description" {...register("description_name")} />
+                                    <Form.Control type="description" placeholder="Enter your Description" {...register("des_name")} />
 
 
                                 </Form.Group>
@@ -94,7 +115,7 @@ const DashBoardCon1 = () => {
 
                                 <Form.Group >
 
-                                    <Form.Control type={passwordVisibility ? "text" : "password"} placeholder="Enter your passcode" {...register("password")} />
+                                    <Form.Control type={passwordVisibility ? "text" : "password"} placeholder="Enter your passcode" {...register("passcode")} />
                                     {errors.password && (
                                         <p className="text-red-500 text-sm font-semibold mt-1">{errors.password.message}</p>
                                     )}

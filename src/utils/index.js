@@ -39,21 +39,21 @@ export const removeAccessRole = () => {
 };
 
 
-export function getAttendances() {
-    let accessAttendances = null;
-    if (typeof window !== undefined && window.localStorage.getItem('access-attendances')) {
-        accessAttendances = window.localStorage.getItem('access-attendances');
-        return accessAttendances;
+export function getUserId() {
+    let userId = null;
+    if (typeof window !== undefined && window.localStorage.getItem('access-userid')) {
+        userId = window.localStorage.getItem('access-userid');
+        return userId;
     } else {
         removeAccessAttendances();
     }
-    return accessAttendances;
+    return userId;
 }
 
-export const setAccessAttendances = (role) => {
-    window.localStorage.setItem('access-Attendances', role);
+export const setuserId = (userid) => {
+    window.localStorage.setItem('access-userid',userid);
 };
 
 export const removeAccessAttendances = () => {
-    window.localStorage.removeItem('access-attendances');
+    window.localStorage.removeItem('access-userid');
 };

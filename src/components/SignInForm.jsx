@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { removeAccessToken, setAccessToken ,setAccessRole} from '../utils';
+import { removeAccessToken, setAccessToken ,setAccessRole, setuserId} from '../utils';
 
 
 // interface IData {
@@ -67,6 +67,9 @@ const SignInForm = () => {
                 }
                 setAccessToken(response.data);
                 setAccessRole(response.data.role);
+                setuserId(response.data.user_id);
+               
+
             }
 
 
