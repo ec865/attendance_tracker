@@ -277,10 +277,10 @@ def sign_in():
         if email == user.get('email'):
             if password == user.get('password'):
                 return {
+                    'user_id' : user.id,
                     'name' : user.get('name'),
                     'surname' : user.get('surname'),
-                    'role' : user.get('role'),
-                    'user_id' : user.get('user_id')
+                    'role' : user.get('role')
                 }
     return "email or password is wrong", 404
 #Sign up
