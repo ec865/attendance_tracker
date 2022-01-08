@@ -10,7 +10,7 @@ const Contents = () => {
     const [eventData, seteventData] = useState()
     useEffect(() => {
 
-        axios.get(`http://127.0.0.1:8080/api/events`).then((res) => seteventData(res.data))
+        axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/events`).then((res) => seteventData(res.data))
 
 
     }, [])

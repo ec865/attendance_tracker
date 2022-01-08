@@ -43,7 +43,7 @@ const Con1 = () => {
         console.log(38)
 
         async function fetchdata() {
-               await axios.get(`http://127.0.0.1:8080/api/attendances`).then((res) => setdescriptionsData(res.data))
+               await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances`).then((res) => setdescriptionsData(res.data))
             
         }
         fetchdata()
@@ -96,7 +96,7 @@ const Con1 = () => {
         history.push("/LastPage")
 
          try {
-            await axios.post(`http://127.0.0.1:8080/api/descriptions/event2/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
+            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions/event2/add?passcode=${data.passcode}&start_time=${data.start_time}&end_time=${data.end_time}&des_name=${data.des_name}`)
             history.push("/LastPage")
         }
         catch {

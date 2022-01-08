@@ -48,7 +48,7 @@ const SignUpForm = () => {
     const onSubmit = handleSubmit(async ({ reEnterPassword, ...data }) => {
         console.log(data);
         try {
-            await axios.post(`http://127.0.0.1:8080/api/signup?email=${data.email}&name=${data.name}&surname=${data.surname}&password=${data.password}&role=0`)
+            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/signup?email=${data.email}&name=${data.name}&surname=${data.surname}&password=${data.password}&role=0`)
             history.push("/SignIn")
         }
         catch {

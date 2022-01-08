@@ -35,7 +35,7 @@ const DashBoardCom = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const handlEventDelete = (event_id) => {
-        axios.delete(`http://127.0.0.1:8080/api/events/delete?event_id=${event_id}`)
+        axios.delete(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/events/delete?event_id=${event_id}`)
 
         handleClose()
     }
@@ -57,7 +57,7 @@ const DashBoardCom = () => {
         console.log(data);
         setAddEvent(false);
         try {
-             await axios.post(`http://127.0.0.1:8080/api/events/1/add?event_name=${data.event_name}`)
+             await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/events/1/add?event_name=${data.event_name}`)
            
 
         }
@@ -74,7 +74,7 @@ const DashBoardCom = () => {
     const [eventData, seteventData] = useState()
  
 
-        axios.get(`http://127.0.0.1:8080/api/events`).then((res) => { seteventData(res.data);console.log(res.data)} )
+        axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app//api/events`).then((res) => { seteventData(res.data);console.log(res.data)} )
     
 
 
