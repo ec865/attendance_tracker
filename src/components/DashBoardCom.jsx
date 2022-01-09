@@ -23,9 +23,6 @@ const validationSchema = Yup.object().shape({
 
 const DashBoardCom = () => {
 
-
-
-
     // const [passcode, setpasscode] = useState("")
     const [selectedCourse, setselectedCourse] = useState()
     const [renderCount, setrenderCount] = useState(0)
@@ -63,7 +60,6 @@ const DashBoardCom = () => {
     const {
         register,
         handleSubmit,
-        formState: {},
     } = useForm({
         resolver: yupResolver(validationSchema),
         mode: 'onBlur',
@@ -156,7 +152,7 @@ const DashBoardCom = () => {
                 </Modal.Header>
                 <Modal.Body>Are you Sure,you want to delete {selectedCourse&&selectedCourse.event_name}</Modal.Body>
 
-                <div><Button onClick={()=>handlEventDelete(selectedCourse.event_id)} style={{ width: "20%", backgroundColor: "#703F3F" }}>
+                <div  className='ml-2 pl-2'><Button onClick={()=>handlEventDelete(selectedCourse.event_id)} style={{ width: "20%", backgroundColor: "#703F3F"}}>
                 Confirm
                 </Button>
                 </div>

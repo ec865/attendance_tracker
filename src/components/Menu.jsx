@@ -5,7 +5,7 @@ import { removeAccessToken } from '../utils';
 
 const Menu = () => {
     const history = useHistory();
-    const handleSignOut = ()=>{ history.push("/");removeAccessToken() }
+    const handleSignOut = ()=>{ history.push("/signout");removeAccessToken() }
     return (
 
         <div>
@@ -20,7 +20,6 @@ const Menu = () => {
                         <Nav>
                             <Nav.Link href="/SignUp">SIGN UP</Nav.Link>
                             <Nav.Link href="/SignIn">SIGN IN</Nav.Link>
-
                             <Button onClick={handleSignOut} variant="secondary">Sign Out</Button>
                             {/* <Nav.Link href="/">SIGN OUT</Nav.Link> */}
 

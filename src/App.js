@@ -10,6 +10,7 @@ import Menu from './components/Menu';
 import Con1 from './pages/Con1';
 import LastPage from './pages/LastPage';
 import sucess from './pages/sucess';
+import signout from './pages/signout';
 import Dashboard from './pages/Dashboard';
 import DashBoardCon1 from './pages/DashBoardCon1';
 import { getRole } from './utils/index.js';
@@ -47,26 +48,16 @@ function App() {
               <Switch>
                 <Route exact path="/" component={Landing} />
                 <Route exact path="/SignIn" component={SignIn} />
-                {/* {userRole === 0 && <div> */}
-                  
                   <Route exact path="/Contents" component={Contents} />
                   <Route exact path="/Contents/:event_id" component={Con1} />
                   <Route exact path="/LastPage" component={LastPage} />
-                  
-                {/* </div>} */}
-
-                <Route exact path="/SignUp" component={SignUp} />
-                
-
-                
-              
-                {/* {userRole === 1 && <div> */}
-                  
+                  <Route exact path="/SignUp" component={SignUp} />
                   <Route exact path="/dashboard" component={Dashboard} />
                   <Route exact path="/dashBoard/:DashBoard_event_id" component={DashBoardCon1} />
                   <Route exact path="/sucess" component={sucess} />
+                  <Route exact path="/signout" component={signout} />
                 
-                {/* </div>} */}
+               
                 
               </Switch>
             </Suspense>

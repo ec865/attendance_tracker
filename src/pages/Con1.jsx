@@ -142,7 +142,7 @@ const Con1 = () => {
                                         <ToggleButton
                                             key={idx}
                                             id={`radio-${idx}`}
-                                            type="radio"
+                                            type="status"
                                             variant='outline-success'
                                             name="radio"
                                             value={radio.value}
@@ -154,6 +154,11 @@ const Con1 = () => {
                                     ))}
                                 </ButtonGroup>
                             </td>
+
+                            
+                                
+
+                            
 
                             <td>
 
@@ -192,7 +197,7 @@ const Con1 = () => {
                 </thead>
                 <tbody>{attendancesData && attendancesData.map((v, i) => (
                     <tr key={i}>
-                        <td>{v.start_time} - {v.end_time}</td>
+                        <td>{v.start_time}--{v.end_time} </td>
                         <td>{v.description_name}</td>
                         <td>{v.status === "present" ? <p className="text-success">Present</p> : <p className="text-danger">Absent</p>}
                         </td>
