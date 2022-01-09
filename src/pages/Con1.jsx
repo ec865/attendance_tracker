@@ -18,9 +18,6 @@ const validationSchema = Yup.object().shape({
     passcode: Yup.string()
         .trim()
         .required('Required'),
-        status: Yup.string()
-        .trim()
-        .required('Required'),
 });
 
 
@@ -28,6 +25,14 @@ const validationSchema = Yup.object().shape({
 const Con1 = () => {
     // const user = getAttendances()
     //  console.log(user)
+    const [passwordVisibility] = useState(false)
+    // const [status, setstatus] = useState('');
+    const [radioValue,setRadioValue] = useState('');
+    const status = [
+        { name: 'Present', value: 'Present' },
+        { name: 'Absent', value: 'Absent' },
+
+    ];
 
     const [attendancesData, setattendancesData] = useState("")
     const history = useHistory()
@@ -50,7 +55,7 @@ const Con1 = () => {
         }
         console.log(descriptionsData)
         fetchdata()
-   
+
         console.log(42)
 
 
@@ -94,29 +99,23 @@ const Con1 = () => {
         }
     });
     
-    
+    // console.log(radioValue)
     const onSubmit = handleSubmit(async (data) => {
         console.log(data);
-        history.push("/LastPage")
+        // history.push("/LastPage")
+        // console.log(radioValue)
 
          try {
-            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances/u/${id.user_id}/d/${id.descriptions_id}/add?passcode=${data.passcode}&status=${data.status}`)
+            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances/u/${getUserId()}/d/${data.descriptions_id}/add?passcode=${data.passcode}&status=${data.status}`)
             history.push("/LastPage")
+            
         }
         catch {
 
            
         }
     });
-    const [passwordVisibility] = useState(false)
-    const [radioValue, setRadioValue] = useState('1');
-
-
-    const radios = [
-        { name: 'Present', value: 'Present' },
-        { name: 'Absent', value: 'Absent' },
-
-    ];
+    
     return (
         <Container>
             <div className='con mt-5 text-center"'  ><p className=" text-center" >Attendance Tracker</p></div>
@@ -137,8 +136,8 @@ const Con1 = () => {
                             <td>{ attendancesData.length>0&&attendancesData[0].description_name }</td>
                             <td>
 
-                                <ButtonGroup className="mb-2  " variant='outline-primary'>
-                                    {radios.map((radio, idx) => (
+                                {/* <ButtonGroup className="mb-2  " variant='outline-primary'>
+                                    {status.map((radio, idx) => (
                                         <ToggleButton
                                             key={idx}
                                             id={`radio-${idx}`}
@@ -152,7 +151,17 @@ const Con1 = () => {
                                             {radio.name}
                                         </ToggleButton>
                                     ))}
-                                </ButtonGroup>
+                                </ButtonGroup> */}
+                            {/* <Button  onClick={()=>(setstatus("present"))}></Button>
+                            <Button onClick={()=>(setstatus("absent"))}></Button> */}
+
+                                <Form.Group >
+
+                                <Form.Control type="text" placeholder="Enter your Description" {...register("status")} />
+
+
+                                </Form.Group>
+
                             </td>
 
                             

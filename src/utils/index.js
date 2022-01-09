@@ -57,3 +57,23 @@ export const setuserId = (userid) => {
 export const removeAccessAttendances = () => {
     window.localStorage.removeItem('access-userid');
 };
+
+
+// export function getDescriptionsId() {
+//     let descriptionsId= null;
+//     if (typeof window !== undefined && window.localStorage.getItem('access-descriptionsid')) {
+//         descriptionsId = window.localStorage.getItem('access-descriptionsid');
+//         return descriptionsId;
+//     } else {
+//         removeAccessAttendances();
+//     }
+//     return descriptionsId;
+// }
+
+// export const setdescriptionsId = (descriptionsid) => {
+//     window.localStorage.setItem('access-descriptionsid',descriptionsid);
+// };
+
+// export const removeAccessDescriptions = () => {
+//     window.localStorage.removeItem('access-descriptionsid');
+// };

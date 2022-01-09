@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import Table from 'react-bootstrap/Table'
 import { Form, Button } from 'react-bootstrap';
@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { getUserId } from '../utils';
+
 
 const validationSchema = Yup.object().shape({
 
@@ -30,8 +30,6 @@ const validationSchema = Yup.object().shape({
 
 const DashBoardCon1 = () => {
 
-
-
     const history = useHistory()
     const  id  = useParams()
 
@@ -50,6 +48,32 @@ const DashBoardCon1 = () => {
 
         }
     });
+
+    const [attendancesData, setattendancesData] = useState("")
+    // const history = useHistory()
+    const [descriptionsData, setdescriptionsData] = useState()
+
+    useEffect(() => {
+
+        console.log(38)
+
+        async function fetchdata() {
+            await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances`).then((res) => setattendancesData(res.data))
+            await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions`).then((res) => setdescriptionsData(res.data))
+            
+            
+        }
+        console.log(descriptionsData)
+        fetchdata()
+
+        console.log(42)
+
+
+     
+          
+
+
+    }, [])
     const onSubmit = handleSubmit(async (data) => {
 
         try {
@@ -147,11 +171,42 @@ const DashBoardCon1 = () => {
 
                     </tbody>
                 </Table>
+                
+              
+
+
+                
                 <br />
                 <div className="col-md-12 text-center " >
                     <Button type="submit" variant="danger">Submit</Button>
                 </div>
             </Form>
+            <br/>
+
+
+            <Table striped bordered hover className=" text-center">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        {/* <th>Remarks</th> */}
+                    </tr>
+                </thead>
+                <tbody>{descriptionsData && descriptionsData.map((v, i) => (
+                    <tr key={i}>
+                        <td>{v.start_time}--{v.end_time} </td>
+                        <td>{v.description_name}</td>
+                        <td>{v.status === "present" ? <p className="text-success">Present</p> : <p className="text-danger">Absent</p>}
+                        </td>
+                        {/* <td>{v.remarks}</td> */}
+                    </tr>
+
+                ))}
+
+                </tbody>
+                
+            </Table>
 
 
 
