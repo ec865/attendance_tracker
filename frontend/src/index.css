@@ -1,0 +1,32 @@
+/* body, html {
+height: 100%;
+}
+.bg {
+background-image: url("https://mdbcdn.b-cdn.net/img/Photos/Horizontal/Work/4-col/img%20%2814%29.webp");
+height: 100vh;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+} */
+
+.con {
+  font-family: Poiret One;
+  color: #703f3f;
+  font-size: 30px;
+}
+.mb {
+  background-image: linear-gradient(
+    to right,
+    rgba(246, 246, 246, 0),
+    rgb(105, 67, 67)
+  );
+}
+.lp {
+  font-family: Poiret One;
+  color: #703f3f;
+  font-size: 70px;
+}
+.dash1 {
+  margin-left: 2;
+}
+
