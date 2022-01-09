@@ -91,7 +91,7 @@ const DashBoardCon1 = () => {
                     attendancesData.map((x) => {
                         console.log(x)
                         if (x.description_id === e.description_id) {
-                            e.status.push(x.user_id)
+                            e.status.push(x.user_id + ' ')
                         }
                         return x;
                     })
@@ -223,7 +223,7 @@ const DashBoardCon1 = () => {
                     <tr>
                         <th>Date</th>
                         <th>Description</th>
-                        <th>Status</th>
+                        <th>Users</th>
                         {/* <th>Remarks</th> */}
                     </tr>
                 </thead>
