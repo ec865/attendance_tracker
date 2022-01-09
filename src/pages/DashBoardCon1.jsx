@@ -74,6 +74,40 @@ const DashBoardCon1 = () => {
 
 
     }, [])
+
+
+    useEffect(() => {
+        console.log(descriptionsData)
+        if (descriptionsData) {
+            console.log(47)
+            let events =  descriptionsData.map((e) => {
+                e.status = []
+                return e
+            })
+            if ( attendancesData) {
+                events = events.map((e) => {
+                    
+                    console.log(e)
+                    attendancesData.map((x) => {
+                        console.log(x)
+                        if (x.description_id === e.description_id) {
+                            e.status.push(x.user_id)
+                        }
+                        return x;
+                    })
+                    return e;
+
+                })
+
+
+            }
+            setattendancesData(events)
+           
+            
+            console.log(events)
+        }
+    },[descriptionsData] )
+
     const onSubmit = handleSubmit(async (data) => {
 
         try {
@@ -197,8 +231,7 @@ const DashBoardCon1 = () => {
                     <tr key={i}>
                         <td>{v.start_time}--{v.end_time} </td>
                         <td>{v.description_name}</td>
-                        <td>{v.status === "present" ? <p className="text-success">Present</p> : <p className="text-danger">Absent</p>}
-                        </td>
+                        <td>{v.status}</td>
                         {/* <td>{v.remarks}</td> */}
                     </tr>
 

@@ -1,8 +1,8 @@
 import React, { useState,useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import Table from 'react-bootstrap/Table'
-import ToggleButton from 'react-bootstrap/ToggleButton'
-import ButtonGroup from 'react-bootstrap/Button'
+// import ToggleButton from 'react-bootstrap/ToggleButton'
+// import ButtonGroup from 'react-bootstrap/Button'
 import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -10,8 +10,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory ,useParams} from 'react-router-dom';
 import axios from 'axios';
 import { getUserId} from '../utils';
-
-
 
 const validationSchema = Yup.object().shape({
 
@@ -25,18 +23,18 @@ const validationSchema = Yup.object().shape({
 const Con1 = () => {
     // const user = getAttendances()
     //  console.log(user)
-    const [passwordVisibility] = useState(false)
+
     // const [status, setstatus] = useState('');
-    const [radioValue,setRadioValue] = useState('');
-    const status = [
-        { name: 'Present', value: 'Present' },
-        { name: 'Absent', value: 'Absent' },
+    // const [radioValue,setRadioValue] = useState('');
+    // const status = [
+    //     { name: 'Present', value: 'Present' },
+    //     { name: 'Absent', value: 'Absent' },
 
-    ];
+    // ];
 
+    const [passwordVisibility] = useState(false)
     const [attendancesData, setattendancesData] = useState("")
     const history = useHistory()
-
     const [descriptionsData, setdescriptionsData] = useState()
     const userId = getUserId()
     const id = useParams()
@@ -48,7 +46,7 @@ const Con1 = () => {
         console.log(38)
 
         async function fetchdata() {
-            await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances`).then((res) => setattendancesData(res.data))
+            await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances/u/${getUserId()}`).then((res) => setattendancesData(res.data))
             await axios.get(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/descriptions`).then((res) => setdescriptionsData(res.data))
             
             
@@ -58,33 +56,37 @@ const Con1 = () => {
 
         console.log(42)
 
-
-     
-          
-
-
     }, [])
-
-
-
     
-   
     useEffect(() => {
-          console.log(descriptionsData)
-        
+        console.log(descriptionsData)
         if (descriptionsData) {
-        
-           let events = descriptionsData.filter((e) => e.user_id = userId)
+            console.log(47)
+            let events = descriptionsData.filter((e) => e.user_id = userId)
+            if ( attendancesData) {
+                events = events.map((e) => {
+                    e.status = "absent"
+                    console.log(e)
+                    attendancesData.map((x) => {
+                        console.log(x)
+                        if (x.description_id === e.description_id) {
+                            e.status = "present"
+                        }
+                        return x;
+                    })
+                    return e;
+
+                })
+
+
+            }
             setattendancesData(events)
            
             
-            console.log(47)
+            console.log(events)
         }
     },[descriptionsData] )
 
-    
-    
-    
     const {
         register,
         handleSubmit,
@@ -106,7 +108,7 @@ const Con1 = () => {
         // console.log(radioValue)
 
          try {
-            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances/u/${getUserId()}/d/${data.descriptions_id}/add?passcode=${data.passcode}&status=${data.status}`)
+            await axios.post(`https://attendance-backend-3my2gtpqya-ew.a.run.app/api/attendances/u/${getUserId()}/d/${descriptionsData&&descriptionsData[0].description_id}/add?passcode=${data.passcode}&status=${data.status}`)
             history.push("/LastPage")
             
         }
@@ -163,12 +165,6 @@ const Con1 = () => {
                                 </Form.Group>
 
                             </td>
-
-                            
-                                
-
-                            
-
                             <td>
 
 
@@ -182,6 +178,8 @@ const Con1 = () => {
                                 </Form.Group>
 
                             </td>
+
+                            
                         </tr>
 
                     </tbody>
@@ -204,10 +202,13 @@ const Con1 = () => {
                         {/* <th>Remarks</th> */}
                     </tr>
                 </thead>
+                
+                
                 <tbody>{attendancesData && attendancesData.map((v, i) => (
-                    <tr key={i}>
+                    <tr >
                         <td>{v.start_time}--{v.end_time} </td>
                         <td>{v.description_name}</td>
+                        
                         <td>{v.status === "present" ? <p className="text-success">Present</p> : <p className="text-danger">Absent</p>}
                         </td>
                         {/* <td>{v.remarks}</td> */}
